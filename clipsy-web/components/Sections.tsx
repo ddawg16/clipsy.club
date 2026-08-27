@@ -544,7 +544,8 @@ export function Footer({ discord }: { discord: string }) {
             </span>
             <a href="/campaigns" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Campaigns</a>
             <a href="/wire" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>The Wire</a>
-            <a href="/learn" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Learn to clip</a>
+            <a href="/clip" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Get paid to clip</a>
+            <a href="/learn" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Learn &amp; Earn</a>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span className="eyebrow" style={{ fontSize: 11.5 }}>
@@ -554,6 +555,8 @@ export function Footer({ discord }: { discord: string }) {
             <a href="/contact" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Contact us</a>
             <a href="/brands#how" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>How it works</a>
             <a href="/brands#pricing" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>What it costs</a>
+            <a href="/enterprise" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Enterprise</a>
+            <a href="/how-campaigns-work" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>How campaigns work</a>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span className="eyebrow" style={{ fontSize: 11.5 }}>
