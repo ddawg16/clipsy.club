@@ -6,10 +6,26 @@ import { CampaignCard } from './CampaignCard';
 import { safeHref } from '@/lib/safe';
 
 const TABS: Array<{ id: SortKey; label: string; note: string }> = [
-  { id: 'hot',    label: 'Hottest',             note: 'Ranked by clips posted, views landed, and how fast the pool is filling. Hot means competitive — get in early or not at all.' },
-  { id: 'easy',   label: 'Easiest to get paid', note: 'Low view minimums, fast payout cycles, and clips that rarely get rejected. Start here if you have never been paid for a clip.' },
-  { id: 'rate',   label: 'Best rate',           note: 'Straight CPM, highest first. Worth saying out loud: the highest rate is almost never the easiest money.' },
-  { id: 'ending', label: 'Ending soon',         note: 'Closing soonest. These pools cap out early more often than they run to the deadline.' },
+  {
+    id: 'hot',
+    label: 'Hottest',
+    note: 'Heat = 45% where the rate sits against every other campaign on the board, 35% how recently it appeared, 20% how close it is to its deadline. High heat means competitive, not easy.',
+  },
+  {
+    id: 'easy',
+    label: 'Easiest to get paid',
+    note: 'Effort = 55% how low the view minimum is, 45% how fast the payout cycle is. Best place to start if you have never been paid for a clip.',
+  },
+  {
+    id: 'rate',
+    label: 'Best rate',
+    note: 'Straight CPM, highest first. Worth saying out loud: the highest rate is almost never the easiest money, and it is usually attached to the highest view minimum.',
+  },
+  {
+    id: 'ending',
+    label: 'Ending soon',
+    note: 'Closing soonest. These pools cap out early more often than they run to the deadline — check the claimed bar before you commit a night.',
+  },
 ];
 
 const EFFORT_STYLE: Record<string, { background: string; color: string }> = {
@@ -127,7 +143,14 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
         })}
       </div>
 
-      <p style={{ fontSize: 13.5, color: 'var(--ink-faint)', margin: 0, maxWidth: 640, lineHeight: 1.5 }}>{active.note}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 680 }}>
+        <p style={{ fontSize: 13.5, color: 'var(--ink-faint)', margin: 0, lineHeight: 1.5 }}>{active.note}</p>
+        <p style={{ fontSize: 12.5, color: 'var(--ink-faint)', margin: 0, lineHeight: 1.5, opacity: 0.85 }}>
+          Both scores are built to sharpen using approval and payout data from our own clippers. We haven&rsquo;t
+          collected enough of that yet, so today they run on public signals only — we&rsquo;d rather say so than imply
+          we know more than we do.
+        </p>
+      </div>
 
       {/* filters */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 4 }}>

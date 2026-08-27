@@ -57,7 +57,7 @@ export default function ContactPage() {
               <p style={{ fontSize: 14.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
                 Skip all this and go straight to the board.
               </p>
-              <a className="btn btn-ghost" href="/campaigns" style={{ fontSize: 14, alignSelf: 'flex-start' }}>
+              <a className="btn btn-ghost" href="/" style={{ fontSize: 14, alignSelf: 'flex-start' }}>
                 See campaigns
               </a>
             </div>

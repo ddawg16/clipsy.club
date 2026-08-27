@@ -14,7 +14,7 @@ export default function NotFound() {
           thing The Wire records.
         </p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 8 }}>
-          <a className="btn btn-primary" href="/campaigns">See open campaigns</a>
+          <a className="btn btn-primary" href="/">See open campaigns</a>
           <a className="btn btn-ghost" href="/wire">Check The Wire</a>
         </div>
       </main>

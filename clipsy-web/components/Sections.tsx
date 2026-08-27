@@ -15,14 +15,49 @@ export function Nav({ discord }: { discord: string }) {
 /* --------------------------------------------------------- page header */
 
 /** Masthead for every page that is not the homepage. */
-export function PageHeader({ eyebrow, title, blurb, meta }: { eyebrow: string; title: string; blurb?: string; meta?: React.ReactNode }) {
+export function PageHeader({
+  eyebrow,
+  title,
+  blurb,
+  meta,
+  compact,
+}: {
+  eyebrow: string;
+  title: string;
+  blurb?: string;
+  meta?: React.ReactNode;
+  compact?: boolean;
+}) {
+  // `compact` is for the board, where the masthead should cost one line of
+  // scroll rather than a full screen before anyone sees a campaign.
+  if (compact) {
+    return (
+      <div style={{ borderBottom: '1px solid var(--cream-line)', background: 'var(--cream-card)' }}>
+        <div
+          className="wrap"
+          style={{
+            padding: '20px 32px',
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            gap: 16,
+            flexWrap: 'wrap',
+          }}
+        >
+          <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.2 }}>{title}</h1>
+          {meta}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ borderBottom: '1px solid var(--cream-line)', background: 'var(--cream-card)' }}>
-      <div className="wrap" style={{ padding: '56px 32px 40px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div className="wrap" style={{ padding: '44px 32px 34px', display: 'flex', flexDirection: 'column', gap: 12 }}>
         <span className="eyebrow">{eyebrow}</span>
-        <h1 style={{ fontSize: 'clamp(30px, 4.5vw, 44px)', fontWeight: 700, lineHeight: 1.08, maxWidth: 720 }}>{title}</h1>
-        {blurb && <p style={{ fontSize: 16.5, color: 'var(--ink-soft)', margin: 0, maxWidth: 620, lineHeight: 1.55 }}>{blurb}</p>}
-        {meta && <div style={{ marginTop: 6 }}>{meta}</div>}
+        <h1 style={{ fontSize: 'clamp(27px, 4vw, 38px)', fontWeight: 700, lineHeight: 1.08, maxWidth: 720 }}>{title}</h1>
+        {blurb && <p style={{ fontSize: 16, color: 'var(--ink-soft)', margin: 0, maxWidth: 620, lineHeight: 1.5 }}>{blurb}</p>}
+        {meta && <div style={{ marginTop: 4 }}>{meta}</div>}
       </div>
     </div>
   );
@@ -290,21 +325,55 @@ export function LiveBoard({ campaigns }: { campaigns: Campaign[] }) {
 }
 
 /** Hand-picked by the team. Nothing automated writes these. */
-export function TeamPicks({ picks }: { picks: Campaign[] }) {
+export function TeamPicks({
+  picks,
+  liveCount,
+  unclaimed,
+}: {
+  picks: Campaign[];
+  liveCount?: number;
+  unclaimed?: number;
+}) {
   if (picks.length === 0) return null;
 
   return (
-    <div className="wrap section" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 560 }}>
-        <span className="eyebrow" style={{ color: 'var(--accent)' }}>Picked by us</span>
-        <h2 style={{ fontSize: 32, fontWeight: 700 }}>If you&rsquo;ve never been paid for a clip, start here.</h2>
-        <p style={{ fontSize: 15.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 }}>
-          Chosen by hand, not by the algorithm — low view minimums, readable briefs, and payouts that actually land.
-          We change these when the campaigns change.
-        </p>
+    <div className="wrap" style={{ paddingTop: 28, paddingBottom: 8, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 480, flex: '1 1 340px' }}>
+          <span className="eyebrow" style={{ color: 'var(--accent)' }}>Picked by us</span>
+          <h2 style={{ fontSize: 23, fontWeight: 700, lineHeight: 1.2 }}>
+            If you&rsquo;ve never been paid for a clip, start here.
+          </h2>
+          <p style={{ fontSize: 14, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.45 }}>
+            Chosen by hand, not by the algorithm — low view minimums, readable briefs, and payouts that actually land.
+          </p>
+        </div>
+
+        {/* The dead space on the right now carries the two numbers people came for. */}
+        {(liveCount != null || unclaimed != null) && (
+          <div style={{ display: 'flex', gap: 28, flexShrink: 0, paddingTop: 4 }}>
+            {liveCount != null && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span className="display tabular" style={{ fontSize: 30, fontWeight: 700, lineHeight: 1 }}>
+                  {liveCount}
+                </span>
+                <span style={{ fontSize: 12.5, color: 'var(--ink-faint)' }}>active campaigns</span>
+              </div>
+            )}
+            {unclaimed != null && unclaimed > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span className="display tabular" style={{ fontSize: 30, fontWeight: 700, lineHeight: 1, color: 'var(--accent)' }}>
+                  {money(unclaimed)}
+                </span>
+                <span style={{ fontSize: 12.5, color: 'var(--ink-faint)' }}>still unclaimed</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(252px, 1fr))', gap: 18 }}>
-        {picks.map((c) => <CampaignCard key={c.id} c={c} pick />)}
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(212px, 1fr))', gap: 12 }}>
+        {picks.map((c) => <CampaignCard key={c.id} c={c} pick compact />)}
       </div>
     </div>
   );

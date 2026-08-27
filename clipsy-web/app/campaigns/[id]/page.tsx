@@ -52,7 +52,7 @@ export default async function CampaignPage({ params }: Props) {
       <main>
         <div style={{ borderBottom: '1px solid var(--cream-line)', background: 'var(--cream-card)' }}>
           <div className="wrap" style={{ padding: '32px 32px 40px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <a href="/campaigns" style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink-soft)' }}>
+            <a href="/" style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink-soft)' }}>
               ← All campaigns
             </a>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>

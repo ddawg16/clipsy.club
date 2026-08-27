@@ -115,7 +115,7 @@ export async function getWire(limit = 6): Promise<WireEvent[]> {
   return data as WireEvent[];
 }
 
-export type Counts = { campaigns: number; sources: number; wire: number; budget: number };
+export type Counts = { campaigns: number; sources: number; wire: number; budget: number; unclaimed: number };
 
 /**
  * `budget` is the sum of every active campaign's declared pool. PostgREST has
@@ -124,7 +124,7 @@ export type Counts = { campaigns: number; sources: number; wire: number; budget:
  */
 export async function getCounts(): Promise<Counts> {
   const db = client();
-  if (!db) return { campaigns: 0, sources: 0, wire: 0, budget: 0 };
+  if (!db) return { campaigns: 0, sources: 0, wire: 0, budget: 0, unclaimed: 0 };
 
   const weekAgo = new Date(Date.now() - 7 * 86_400_000).toISOString();
 
@@ -132,15 +132,24 @@ export async function getCounts(): Promise<Counts> {
     db.from('campaigns').select('id', { count: 'exact', head: true }).eq('status', 'active'),
     db.from('sources').select('id', { count: 'exact', head: true }).eq('enabled', true),
     db.from('wire_events').select('id', { count: 'exact', head: true }).gte('created_at', weekAgo),
-    db.from('campaigns').select('budget_total').eq('status', 'active'),
+    db.from('campaigns').select('budget_total, budget_used_pct').eq('status', 'active'),
   ]);
 
-  const budget = (budgets.data ?? []).reduce((sum, row) => {
-    const v = Number((row as { budget_total: number | null }).budget_total ?? 0);
-    return Number.isFinite(v) && v > 0 ? sum + v : sum;
-  }, 0);
+  // `unclaimed` is the number a clipper actually cares about: money still on
+  // the table. A pool that is 90% claimed is not $50k of opportunity, it is $5k.
+  let budget = 0;
+  let unclaimed = 0;
+  for (const row of budgets.data ?? []) {
+    const r = row as { budget_total: number | null; budget_used_pct: number | null };
+    const total = Number(r.budget_total ?? 0);
+    if (!Number.isFinite(total) || total <= 0) continue;
+    budget += total;
+    const used = Number(r.budget_used_pct ?? 0);
+    const pct = Number.isFinite(used) ? Math.max(0, Math.min(100, used)) : 0;
+    unclaimed += total * (1 - pct / 100);
+  }
 
-  return { campaigns: campaigns.count ?? 0, sources: sources.count ?? 0, wire: wire.count ?? 0, budget };
+  return { campaigns: campaigns.count ?? 0, sources: sources.count ?? 0, wire: wire.count ?? 0, budget, unclaimed };
 }
 
 /** One campaign by id, for its own page. Null when it does not exist. */
