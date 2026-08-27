@@ -55,7 +55,7 @@ export function CampaignCard({ c, pick }: { c: Campaign; pick?: boolean }) {
       {rates.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span className="eyebrow" style={{ fontSize: 11 }}>
-            {uniform ? 'Up to per 100k · all platforms' : 'Up to per 100k'}
+            {uniform ? 'Rate per 100k · all platforms' : 'Rate per 100k'}
           </span>
           <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
             {(uniform ? rates.slice(0, 1) : rates).map((r) => (

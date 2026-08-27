@@ -105,7 +105,9 @@ export async function getWire(limit = 6): Promise<WireEvent[]> {
   const { data, error } = await db
     .from('wire_events')
     .select('id, type, headline, severity, created_at')
-    .eq('published', true)
+    // NOTE: no .eq('published', true) here on purpose. Row Level Security already
+    // restricts this table to published rows, and the anon role has no column
+    // grant on `published` — filtering on it makes Postgres reject the whole query.
     .order('created_at', { ascending: false })
     .limit(limit);
 
