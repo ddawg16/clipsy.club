@@ -1,0 +1,37 @@
+name: Ingest campaigns
+
+# Free, no Railway. GitHub runs this on their machines every 15 minutes.
+# Caveats worth knowing: free-tier schedules can be delayed a few minutes under
+# load, and GitHub disables scheduled workflows on a repo with no commits for
+# 60 days — push anything to re-arm it.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: clipsy-engine
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - run: npm run ingest
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          WHOP_API_KEY: ${{ secrets.WHOP_API_KEY }}
+          WHOP_ENDPOINT: ${{ secrets.WHOP_ENDPOINT }}

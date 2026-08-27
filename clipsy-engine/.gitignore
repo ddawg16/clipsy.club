@@ -1,0 +1,14 @@
+# SECRETS — never commit. The single most common way small sites get owned.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+node_modules/
+dist/
+.vercel/
+.DS_Store
+npm-debug.log*
+playwright-report/
+test-results/

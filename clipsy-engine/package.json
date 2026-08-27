@@ -1,0 +1,33 @@
+{
+  "name": "clipsy-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Campaign aggregation + Wire diff engine for clipsy.club",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "ingest": "node --experimental-strip-types src/cli.ts ingest",
+    "score": "node --experimental-strip-types src/cli.ts score",
+    "wire": "node --experimental-strip-types src/cli.ts wire",
+    "discover": "node --experimental-strip-types src/cli.ts discover",
+    "test": "node --experimental-strip-types test/diff.test.ts && node --experimental-strip-types test/guard.test.ts && node --experimental-strip-types test/security.test.ts",
+    "serve": "node --experimental-strip-types src/api/server.ts",
+    "probe": "node --experimental-strip-types src/probe.ts",
+    "seed": "node --experimental-strip-types src/seed.ts",
+    "unseed": "node --experimental-strip-types src/seed.ts unseed"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.0",
+    "playwright": "^1.47.0",
+    "typescript": "^5.6.0"
+  }
+}
