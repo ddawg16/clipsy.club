@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getCampaigns } from '@/lib/data';
+import { GUIDES } from '@/lib/guides';
 
 const BASE = 'https://clipsy.club';
 
@@ -15,8 +16,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Every live campaign is its own indexable page — this is the SEO surface.
   const campaigns = await getCampaigns('hot', 300);
+  const guides = GUIDES.map((g) => ({
+    url: `${BASE}/learn/${g.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
   return [
     ...staticPages,
+    ...guides,
     ...campaigns.map((c) => ({
       url: `${BASE}/campaigns/${c.id}`,
       lastModified: new Date(),
