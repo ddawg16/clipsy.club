@@ -1,12 +1,23 @@
 name: Ingest campaigns
 
-# Free, no Railway. GitHub runs this on their machines every 15 minutes.
-# Caveats worth knowing: free-tier schedules can be delayed a few minutes under
-# load, and GitHub disables scheduled workflows on a repo with no commits for
-# 60 days — push anything to re-arm it.
+# Free, no Railway. GitHub runs this on their machines once an hour.
+#
+# Why hourly and not every 15 min:
+#   1. GitHub throttles frequent schedules first. A `*/15` cron is the kind
+#      GitHub silently drops under load, which is why it had never fired on its
+#      own — hourly is inside the band GitHub actually honours.
+#   2. On a PRIVATE repo, Actions minutes are capped at 2,000/month free.
+#      Every 15 min (~2,880 min/mo) blows past that; hourly (~720 min/mo) fits
+#      with room to spare. (Make the repo public and Actions minutes are
+#      unlimited — an option if you ever want tighter refreshes.)
+#
+# Campaign metadata does not change minute to minute, so hourly keeps the board
+# and the Wire fresh without fighting either limit. GitHub also disables
+# scheduled workflows on a repo with no commits for 60 days — push anything to
+# re-arm it.
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '17 * * * *'   # :17 past the hour — off the top-of-hour rush GitHub queues behind
   workflow_dispatch: {}
 
 concurrency:
