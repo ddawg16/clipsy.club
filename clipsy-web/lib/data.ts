@@ -115,19 +115,32 @@ export async function getWire(limit = 6): Promise<WireEvent[]> {
   return data as WireEvent[];
 }
 
-export async function getCounts(): Promise<{ campaigns: number; sources: number; wire: number }> {
+export type Counts = { campaigns: number; sources: number; wire: number; budget: number };
+
+/**
+ * `budget` is the sum of every active campaign's declared pool. PostgREST has
+ * no SUM without a stored procedure, and at ~80 rows pulling one numeric column
+ * and adding it up here is cheaper than maintaining an RPC.
+ */
+export async function getCounts(): Promise<Counts> {
   const db = client();
-  if (!db) return { campaigns: 0, sources: 0, wire: 0 };
+  if (!db) return { campaigns: 0, sources: 0, wire: 0, budget: 0 };
 
   const weekAgo = new Date(Date.now() - 7 * 86_400_000).toISOString();
 
-  const [campaigns, sources, wire] = await Promise.all([
+  const [campaigns, sources, wire, budgets] = await Promise.all([
     db.from('campaigns').select('id', { count: 'exact', head: true }).eq('status', 'active'),
     db.from('sources').select('id', { count: 'exact', head: true }).eq('enabled', true),
     db.from('wire_events').select('id', { count: 'exact', head: true }).gte('created_at', weekAgo),
+    db.from('campaigns').select('budget_total').eq('status', 'active'),
   ]);
 
-  return { campaigns: campaigns.count ?? 0, sources: sources.count ?? 0, wire: wire.count ?? 0 };
+  const budget = (budgets.data ?? []).reduce((sum, row) => {
+    const v = Number((row as { budget_total: number | null }).budget_total ?? 0);
+    return Number.isFinite(v) && v > 0 ? sum + v : sum;
+  }, 0);
+
+  return { campaigns: campaigns.count ?? 0, sources: sources.count ?? 0, wire: wire.count ?? 0, budget };
 }
 
 /** One campaign by id, for its own page. Null when it does not exist. */

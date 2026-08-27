@@ -48,3 +48,17 @@ export function freshness(iso: string | null): string {
   const days = Math.floor(hours / 24);
   return days === 1 ? 'yesterday' : `${days} days ago`;
 }
+
+/** Compact dollars: 1250 -> "$1.3K", 4_200_000 -> "$4.2M". */
+export function money(value: number | null): string {
+  if (value == null || !Number.isFinite(value) || value <= 0) return '—';
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(value >= 10_000_000 ? 0 : 1)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(value >= 10_000 ? 0 : 1)}K`;
+  return `$${Math.round(value)}`;
+}
+
+/** Exact dollars with separators, for the earnings calculator. */
+export function dollars(value: number): string {
+  if (!Number.isFinite(value) || value < 0) return '$0';
+  return `$${Math.round(value).toLocaleString('en-US')}`;
+}

@@ -1,49 +1,15 @@
 import type { Campaign, WireEvent } from '@/lib/types';
-import { ago, rate, timeLeft, views } from '@/lib/format';
+import { ago, money, rate, timeLeft, views } from '@/lib/format';
 import { safeHref } from '@/lib/safe';
 import { ArrowRight, DiscordIcon, Logo } from './Logo';
 import { CampaignCard } from './CampaignCard';
+import { SiteNav } from './SiteNav';
 
 /* ------------------------------------------------------------------ nav */
 
+/** Thin server-side wrapper so every page keeps importing `Nav` from here. */
 export function Nav({ discord }: { discord: string }) {
-  return (
-    <div
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 20,
-        background: 'rgba(250,241,216,0.92)',
-        backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid var(--cream-line)',
-      }}
-    >
-      <div className="wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 76, gap: 24 }}>
-        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Logo size={36} />
-          <span className="display" style={{ fontSize: 21, fontWeight: 700 }}>
-            Clipsy
-          </span>
-        </a>
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 24, fontSize: 14.5, fontWeight: 500 }}>
-          <a href="/campaigns">Campaigns</a>
-          <a href="/wire">The Wire</a>
-          <a href="/learn">Learn</a>
-          <a href="/why-us">Why us</a>
-          <a href="/brands">For brands</a>
-          <a href="/contact">Contact</a>
-        </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <a className="btn btn-ghost" href="/brands" style={{ padding: '11px 16px', fontSize: 14 }}>
-            Start a campaign
-          </a>
-          <a className="btn btn-primary" href={discord} target="_blank" rel="noopener noreferrer" style={{ padding: '11px 18px', fontSize: 14 }}>
-            Join the Discord
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+  return <SiteNav discord={discord} />;
 }
 
 /* --------------------------------------------------------- page header */
@@ -69,11 +35,13 @@ export function Hero({
   liveCount,
   sourceCount,
   wireCount,
+  budget,
 }: {
   discord: string;
   liveCount: number;
   sourceCount: number;
   wireCount: number;
+  budget: number;
 }) {
   return (
     <div className="wrap" style={{ paddingTop: 88, paddingBottom: 64 }}>
@@ -98,12 +66,12 @@ export function Hero({
           </p>
 
           <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-            <a className="btn btn-primary" href={discord} target="_blank" rel="noopener noreferrer" style={{ padding: '15px 26px', fontSize: 16 }}>
-              Get access
+            <a className="btn btn-primary" href="/clip" style={{ padding: '15px 26px', fontSize: 16 }}>
+              Start clipping
               <ArrowRight />
             </a>
-            <a className="btn btn-ghost" href="#hub" style={{ padding: '15px 24px', fontSize: 16 }}>
-              See what&rsquo;s worth clipping
+            <a className="btn btn-ghost" href="/brands" style={{ padding: '15px 24px', fontSize: 16 }}>
+              Start a campaign
             </a>
           </div>
 
@@ -112,7 +80,7 @@ export function Hero({
           </p>
         </div>
 
-        <StatsPanel liveCount={liveCount} sourceCount={sourceCount} wireCount={wireCount} />
+        <StatsPanel liveCount={liveCount} sourceCount={sourceCount} wireCount={wireCount} budget={budget} />
       </div>
     </div>
   );
@@ -123,12 +91,12 @@ export function Hero({
  * network count, Wire events — so nothing here is borrowed from another
  * platform. A live figure beats a big one.
  */
-function StatsPanel({ liveCount, sourceCount, wireCount }: { liveCount: number; sourceCount: number; wireCount: number }) {
+function StatsPanel({ liveCount, sourceCount, wireCount, budget }: { liveCount: number; sourceCount: number; wireCount: number; budget: number }) {
   const stats = [
     { value: String(liveCount || '—'), label: 'campaigns on the board', accent: true },
+    { value: budget > 0 ? money(budget) : '—', label: 'in campaign pools right now' },
     { value: String(sourceCount || '—'), label: 'networks indexed' },
     { value: String(wireCount || '—'), label: 'changes caught this week' },
-    { value: '15 min', label: 'between refreshes' },
   ];
 
   return (
@@ -605,5 +573,44 @@ export function Footer({ discord }: { discord: string }) {
         </span>
       </div>
     </footer>
+  );
+}
+
+
+/* --------------------------------------------------- run a network? band */
+
+/**
+ * The other side of the marketplace. Networks and brands finding this band is
+ * how the index grows without us scraping anyone who would rather we did not.
+ */
+export function NetworkCta() {
+  return (
+    <div className="wrap section">
+      <div
+        className="card"
+        style={{
+          padding: 32,
+          display: 'flex',
+          gap: 32,
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ flex: '1 1 380px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <span className="eyebrow">Running campaigns of your own?</span>
+          <h2 style={{ fontSize: 25, fontWeight: 700, maxWidth: 520 }}>
+            If you run a network or a brand campaign, we&rsquo;ll list it here.
+          </h2>
+          <p style={{ fontSize: 15, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55, maxWidth: 520 }}>
+            Listing is free and every card deep-links straight back to you — we index, we never re-host. Send us the
+            campaign and we&rsquo;ll put it in front of the clippers already checking this board.
+          </p>
+        </div>
+        <a className="btn btn-primary" href="/contact" style={{ padding: '15px 26px', fontSize: 16, flexShrink: 0 }}>
+          Get your campaigns listed
+        </a>
+      </div>
+    </div>
   );
 }

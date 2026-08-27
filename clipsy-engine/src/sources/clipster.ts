@@ -105,7 +105,7 @@ export const clipster: SourceAdapter = {
           name,
           brand: null,
           // Deep-link back to the source. We index, we never re-host.
-          url: safeUrl(`https://www.clipster.gg/campaigns/${c.id}`),
+          url: safeUrl(`https://www.clipster.gg/discover?openedCampaignId=${c.id}`),
           rateCpm,
           minViews: typeof c.minimum_views_for_earnings === 'number' ? c.minimum_views_for_earnings : null,
           platforms,

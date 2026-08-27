@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { FinalCta, Footer, Hero, LiveBoard, Nav, TeamPicks, TwoDoors, WireAndSteps } from '@/components/Sections';
+import { FinalCta, Footer, Hero, LiveBoard, Nav, NetworkCta, TeamPicks, TwoDoors, WireAndSteps } from '@/components/Sections';
 import { getCampaigns, getCounts, getTeamPicks, getWire } from '@/lib/data';
 import { safeExternal } from '@/lib/safe';
 
@@ -23,11 +23,18 @@ export default async function HomePage() {
     <>
       <Nav discord={discord} />
       <main>
-        <Hero discord={discord} liveCount={counts.campaigns} sourceCount={counts.sources} wireCount={counts.wire} />
+        <Hero
+          discord={discord}
+          liveCount={counts.campaigns}
+          sourceCount={counts.sources}
+          wireCount={counts.wire}
+          budget={counts.budget}
+        />
         <TwoDoors discord={discord} />
         <TeamPicks picks={picks} />
         <LiveBoard campaigns={campaigns} />
         <WireAndSteps events={wire} />
+        <NetworkCta />
         <FinalCta discord={discord} />
       </main>
       <Footer discord={discord} />
