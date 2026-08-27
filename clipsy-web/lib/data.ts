@@ -17,7 +17,7 @@ const ORDER: Record<SortKey, { column: string; ascending: boolean }> = {
   hot: { column: 'heat', ascending: false },
   easy: { column: 'effort_score', ascending: false },
   rate: { column: 'rate_cpm', ascending: false },
-  ending: { column: 'ends_at', ascending: true },
+  picks: { column: 'heat', ascending: false },
 };
 
 type Row = {

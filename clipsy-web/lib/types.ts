@@ -30,4 +30,4 @@ export interface WireEvent {
   created_at: string;
 }
 
-export type SortKey = 'hot' | 'easy' | 'rate' | 'ending';
+export type SortKey = 'hot' | 'easy' | 'rate' | 'picks';

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { CampaignHub } from '@/components/CampaignHub';
 import { AppShell } from '@/components/AppShell';
-import { Footer, PageHeader, TeamPicks } from '@/components/Sections';
-import { getCampaigns, getCounts, getLastRun, getTeamPicks } from '@/lib/data';
+import { Footer, PageHeader } from '@/components/Sections';
+import { getCampaigns, getCounts, getLastRun } from '@/lib/data';
 import { freshness } from '@/lib/format';
 import { safeExternal } from '@/lib/safe';
 
@@ -19,10 +19,9 @@ export const revalidate = 300;
  * pitch — so they get the list first and the argument for us second.
  */
 export default async function BoardPage() {
-  const [campaigns, counts, picks, lastRun] = await Promise.all([
+  const [campaigns, counts, lastRun] = await Promise.all([
     getCampaigns('hot', 300),
     getCounts(),
-    getTeamPicks(),
     getLastRun(),
   ]);
   const discord = safeExternal(process.env.NEXT_PUBLIC_DISCORD_INVITE, '#');
@@ -41,7 +40,6 @@ export default async function BoardPage() {
             </span>
           }
         />
-        <TeamPicks picks={picks} liveCount={counts.campaigns} unclaimed={counts.unclaimed} />
         <CampaignHub campaigns={campaigns} freshness={freshness(lastRun)} />
         </main>
         <Footer discord={discord} />
