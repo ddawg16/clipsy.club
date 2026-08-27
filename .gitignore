@@ -16,3 +16,7 @@ next-env.d.ts
 logs/
 .DS_Store
 npm-debug.log*
+
+# build cruft that should never be in the repo
+*.zip
+*.bak
