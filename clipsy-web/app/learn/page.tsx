@@ -124,7 +124,7 @@ export default function LearnPage() {
             Reading is the easy part. Go pick a campaign.
           </h2>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a className="btn btn-primary" href="/campaigns" style={{ padding: '15px 26px', fontSize: 16 }}>
+            <a className="btn btn-primary" href="/" style={{ padding: '15px 26px', fontSize: 16 }}>
               Browse the board
             </a>
             <a className="btn btn-ghost" href="/clip" style={{ padding: '15px 24px', fontSize: 16 }}>

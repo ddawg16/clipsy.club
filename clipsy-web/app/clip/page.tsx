@@ -42,14 +42,9 @@ export default async function ClipPage() {
               No following required. Real brand campaigns, automatic view tracking, and honest ranking of which ones
               actually pay. Your edits, your money.
             </p>
-            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-              <a className="btn btn-primary" href={discord} target="_blank" rel="noopener noreferrer" style={{ padding: '15px 26px', fontSize: 16 }}>
-                Start clipping
-              </a>
-              <a className="btn btn-ghost" href="/campaigns" style={{ padding: '15px 24px', fontSize: 16 }}>
-                Browse {counts.campaigns > 0 ? `${counts.campaigns} campaigns` : 'the board'}
-              </a>
-            </div>
+            <a className="btn btn-primary" href="/" style={{ alignSelf: 'flex-start', padding: '15px 26px', fontSize: 16 }}>
+              Start clipping — see {counts.campaigns > 0 ? `all ${counts.campaigns} campaigns` : 'the board'}
+            </a>
             {counts.budget > 0 && (
               <p style={{ fontSize: 13.5, color: 'var(--ink-faint)', margin: 0 }}>
                 {money(counts.budget)} sitting in open campaign pools right now, across {counts.sources} networks.
@@ -90,7 +85,7 @@ export default async function ClipPage() {
               ))}
             </div>
 
-            <a className="btn btn-primary" href={discord} target="_blank" rel="noopener noreferrer" style={{ alignSelf: 'flex-start', padding: '15px 26px', fontSize: 16 }}>
+            <a className="btn btn-primary" href="/" style={{ alignSelf: 'flex-start', padding: '15px 26px', fontSize: 16 }}>
               Start earning
             </a>
           </div>
@@ -142,7 +137,7 @@ export default async function ClipPage() {
             Free to join. No follower minimum. We tell you when a campaign is not worth your time.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a className="btn btn-primary" href={discord} target="_blank" rel="noopener noreferrer" style={{ padding: '16px 28px', fontSize: 16 }}>
+            <a className="btn btn-primary" href="/" style={{ padding: '16px 28px', fontSize: 16 }}>
               Start clipping
             </a>
             <a className="btn btn-ghost" href="/learn" style={{ padding: '16px 26px', fontSize: 16 }}>

@@ -18,6 +18,7 @@ const MENUS: Menu[] = [
     label: 'Products',
     items: [
       { href: '/clip', title: 'Clip', blurb: 'Get paid to clip, per view' },
+      { href: '/', title: 'Browse campaigns', blurb: 'Every open campaign we can reach' },
       { href: '/brands', title: 'Brands', blurb: 'Run a managed campaign' },
       { href: '/enterprise', title: 'Enterprise', blurb: 'Agencies and labels, at scale' },
       { href: '/how-campaigns-work', title: 'Campaigns', blurb: 'How clipping campaigns work' },
@@ -155,22 +156,13 @@ export function SiteNav({ discord }: { discord: string }) {
             );
           })}
 
-          <a href="/campaigns">Campaigns</a>
+          <a href="/home">Home</a>
           <a href="/contact">Contact</a>
         </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <a className="btn btn-ghost" href="/brands" style={{ padding: '11px 16px', fontSize: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          <a className="btn btn-primary" href="/brands" style={{ padding: '11px 18px', fontSize: 14 }}>
             Start a campaign
-          </a>
-          <a
-            className="btn btn-primary"
-            href={discord}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ padding: '11px 18px', fontSize: 14 }}
-          >
-            Start clipping
           </a>
         </div>
       </div>

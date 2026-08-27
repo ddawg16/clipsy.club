@@ -7,10 +7,10 @@ const BASE = 'https://clipsy.club';
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPages = ['', '/clip', '/brands', '/enterprise', '/how-campaigns-work', '/campaigns', '/wire', '/learn', '/why-us', '/faq', '/contact'].map((p) => ({
+  const staticPages = ['', '/home', '/clip', '/brands', '/enterprise', '/how-campaigns-work', '/wire', '/learn', '/why-us', '/faq', '/contact'].map((p) => ({
     url: `${BASE}${p}`,
     lastModified: new Date(),
-    changeFrequency: (p === '' || p === '/campaigns' || p === '/wire' ? 'hourly' : 'weekly') as 'hourly' | 'weekly',
+    changeFrequency: (p === '' || p === '/wire' ? 'hourly' : 'weekly') as 'hourly' | 'weekly',
     priority: p === '' ? 1 : 0.7,
   }));
 

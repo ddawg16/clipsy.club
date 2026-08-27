@@ -85,7 +85,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                 get paid — including how full each pool already is.
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <a className="btn btn-primary" href="/campaigns" style={{ padding: '13px 22px', fontSize: 15 }}>
+                <a className="btn btn-primary" href="/" style={{ padding: '13px 22px', fontSize: 15 }}>
                   Browse campaigns
                 </a>
                 <a className="btn btn-ghost" href={discord} target="_blank" rel="noopener noreferrer" style={{ padding: '13px 20px', fontSize: 15 }}>

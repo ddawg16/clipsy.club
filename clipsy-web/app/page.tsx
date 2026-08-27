@@ -1,21 +1,28 @@
 import type { Metadata } from 'next';
-import { FinalCta, Footer, Hero, LiveBoard, Nav, NetworkCta, TeamPicks, TwoDoors, WireAndSteps } from '@/components/Sections';
-import { getCampaigns, getCounts, getTeamPicks, getWire } from '@/lib/data';
+import { CampaignHub } from '@/components/CampaignHub';
+import { Footer, Nav, PageHeader, TeamPicks } from '@/components/Sections';
+import { getCampaigns, getCounts, getLastRun, getTeamPicks } from '@/lib/data';
+import { freshness, money } from '@/lib/format';
 import { safeExternal } from '@/lib/safe';
 
 export const metadata: Metadata = {
-  title: 'Clipsy — Everything clipping, in one place',
-  description: 'Live clipping campaigns from every network, ranked by how hot they run and how likely you are to actually get paid.',
+  title: 'Clipsy — every open clipping campaign, in one place',
+  description:
+    'Every open clipping campaign we can reach, ranked by how hot it runs and how likely you are to actually get paid. We index — we never re-host.',
 };
 
 export const revalidate = 300;
 
-export default async function HomePage() {
-  const [campaigns, wire, counts, picks] = await Promise.all([
-    getCampaigns('hot', 6),
-    getWire(4),
+/**
+ * The board IS the landing page. Anyone arriving here wants campaigns, not a
+ * pitch — so they get the list first and the argument for us second.
+ */
+export default async function BoardPage() {
+  const [campaigns, counts, picks, lastRun] = await Promise.all([
+    getCampaigns('hot', 300),
     getCounts(),
     getTeamPicks(),
+    getLastRun(),
   ]);
   const discord = safeExternal(process.env.NEXT_PUBLIC_DISCORD_INVITE, '#');
 
@@ -23,19 +30,20 @@ export default async function HomePage() {
     <>
       <Nav discord={discord} />
       <main>
-        <Hero
-          discord={discord}
-          liveCount={counts.campaigns}
-          sourceCount={counts.sources}
-          wireCount={counts.wire}
-          budget={counts.budget}
+        <PageHeader
+          eyebrow="The board"
+          title="Every open campaign we can reach."
+          blurb="Tagged with the network it actually lives on, ranked by our own scoring, and linked straight back to the source. We index — we never re-host."
+          meta={
+            <span className="pill pill-neutral">
+              <span className="dot" />
+              {counts.campaigns} live across {counts.sources} networks
+              {counts.budget > 0 ? ` · ${money(counts.budget)} in open pools` : ''} · updated {freshness(lastRun)}
+            </span>
+          }
         />
-        <TwoDoors discord={discord} />
         <TeamPicks picks={picks} />
-        <LiveBoard campaigns={campaigns} />
-        <WireAndSteps events={wire} />
-        <NetworkCta />
-        <FinalCta discord={discord} />
+        <CampaignHub campaigns={campaigns} freshness={freshness(lastRun)} />
       </main>
       <Footer discord={discord} />
     </>

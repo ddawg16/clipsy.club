@@ -66,7 +66,7 @@ export function Hero({
           </p>
 
           <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-            <a className="btn btn-primary" href="/clip" style={{ padding: '15px 26px', fontSize: 16 }}>
+            <a className="btn btn-primary" href="/" style={{ padding: '15px 26px', fontSize: 16 }}>
               Start clipping
               <ArrowRight />
             </a>
@@ -269,7 +269,7 @@ export function LiveBoard({ campaigns }: { campaigns: Campaign[] }) {
             <span className="eyebrow">Running hot</span>
             <h2 style={{ fontSize: 32, fontWeight: 700 }}>What&rsquo;s moving right now.</h2>
           </div>
-          <a className="btn btn-ghost" href="/campaigns" style={{ background: 'var(--cream)' }}>
+          <a className="btn btn-ghost" href="/" style={{ background: 'var(--cream)' }}>
             See every campaign
             <ArrowRight size={15} />
           </a>
@@ -542,7 +542,7 @@ export function Footer({ discord }: { discord: string }) {
             <span className="eyebrow" style={{ fontSize: 11.5 }}>
               Product
             </span>
-            <a href="/campaigns" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Campaigns</a>
+            <a href="/" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Campaigns</a>
             <a href="/wire" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>The Wire</a>
             <a href="/clip" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Get paid to clip</a>
             <a href="/learn" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Learn &amp; Earn</a>
