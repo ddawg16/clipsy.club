@@ -76,7 +76,7 @@ function Chip({ label, on, onClick }: { label: string; on: boolean; onClick: () 
 }
 
 export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; freshness?: string }) {
-  const [sort, setSort] = useState<SortKey>('hot');
+  const [sort, setSort] = useState<SortKey>('picks');
   const [query, setQuery] = useState('');
   const [platform, setPlatform] = useState<string | null>(null);
   const [source, setSource] = useState<string | null>(null);
