@@ -8,7 +8,9 @@ export const metadata: Metadata = {
   description: 'Rate moves, new drops, raised qualifiers and campaigns that vanish without notice. Every change we catch, as we catch it.',
 };
 
-export const revalidate = 120;
+// Always render fresh from the database. This is a live board — a cached
+// snapshot on a low-traffic domain is worse than a fast DB read each visit.
+export const dynamic = 'force-dynamic';
 
 export default async function WirePage() {
   const events = await getWire(80);

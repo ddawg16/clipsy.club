@@ -11,7 +11,9 @@ export const metadata: Metadata = {
     'Every open clipping campaign we can reach, ranked by how hot it runs and how likely you are to actually get paid. We index — we never re-host.',
 };
 
-export const revalidate = 300;
+// Always render fresh from the database. This is a live board — a cached
+// snapshot on a low-traffic domain is worse than a fast DB read each visit.
+export const dynamic = 'force-dynamic';
 
 /**
  * The board IS the landing page. Anyone arriving here wants campaigns, not a

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'Live clipping campaigns from every network, ranked by how hot they run and how likely you are to actually get paid.',
 };
 
-export const revalidate = 300;
+export const revalidate = 120;
 
 export default async function AboutHomePage() {
   const [wire, counts] = await Promise.all([
