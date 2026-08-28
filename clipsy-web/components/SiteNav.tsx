@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Logo } from './Logo';
+import { DiscordIcon, Logo } from './Logo';
 
 type Item = { href: string; title: string; blurb: string };
 type Menu = { id: string; label: string; items: Item[] };
@@ -88,6 +88,7 @@ export function SiteNav({ discord }: { discord: string }) {
             justifyContent: 'center',
           }}
         >
+          <a href="/home">Home</a>
           {MENUS.map((menu) => {
             const on = open === menu.id;
             return (
@@ -156,13 +157,20 @@ export function SiteNav({ discord }: { discord: string }) {
             );
           })}
 
-          <a href="/home">Home</a>
           <a href="/contact">Contact</a>
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-          <a className="btn btn-primary" href="/brands" style={{ padding: '9px 15px', fontSize: 13 }}>
-            Start a campaign
+          <a
+            className="btn btn-primary"
+            href={discord}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join our Discord"
+            title="Join our Discord"
+            style={{ padding: '9px 12px', minWidth: 44, justifyContent: 'center' }}
+          >
+            <DiscordIcon size={18} />
           </a>
         </div>
       </div>

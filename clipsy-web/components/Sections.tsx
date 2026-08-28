@@ -105,9 +105,6 @@ export function Hero({
               Start clipping
               <ArrowRight />
             </a>
-            <a className="btn btn-ghost" href="/brands" style={{ padding: '15px 24px', fontSize: 16 }}>
-              Start a campaign
-            </a>
           </div>
 
           <p style={{ fontSize: 13.5, color: 'var(--ink-faint)', margin: 0 }}>
@@ -165,20 +162,20 @@ function StatsPanel({ liveCount, sourceCount, wireCount, budget }: { liveCount: 
 export function TwoDoors({ discord }: { discord: string }) {
   const doors = [
     {
-      eyebrow: "If you're clipping",
-      title: 'Find the campaigns worth your night',
-      body: 'Every open campaign we can reach, ranked by how hot it is running and how likely you are to actually get paid. Free, no follower minimum.',
+      eyebrow: 'Get access',
+      title: 'The campaigns move first in our Discord',
+      body: 'The board shows you what is open. The Discord is where you hear a rate went up, a new drop landed, or a pool is about to cap — before it shows on the site. Free to join, no follower minimum, and the fastest way to actually get paid.',
       cta: 'Get access',
       href: discord,
       external: true,
       primary: true,
     },
     {
-      eyebrow: "If you're running a campaign",
-      title: 'Get your footage clipped properly',
-      body: 'A reviewed roster instead of an open board, your rules enforced while it runs, verified numbers at the end, and one invoice.',
-      cta: 'Start a campaign',
-      href: '/brands',
+      eyebrow: 'Agencies & labels',
+      title: 'Running campaigns at scale? We run them for you.',
+      body: 'One managed roster across every client, your rules enforced while it runs, verified numbers and one invoice instead of forty payouts. Built for agencies, labels and brands that launch more than once.',
+      cta: 'Talk to us',
+      href: '/contact',
       external: false,
       primary: false,
     },
@@ -205,8 +202,9 @@ export function TwoDoors({ discord }: { discord: string }) {
               {...(d.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               style={{ alignSelf: 'flex-start', marginTop: 6 }}
             >
+              {d.external ? <DiscordIcon /> : null}
               {d.cta}
-              <ArrowRight />
+              {d.external ? null : <ArrowRight />}
             </a>
           </div>
         ))}

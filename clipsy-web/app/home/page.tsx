@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { FinalCta, Footer, Hero, LiveBoard, Nav, NetworkCta, TeamPicks, TwoDoors, WireAndSteps } from '@/components/Sections';
-import { getCampaigns, getCounts, getTeamPicks, getWire } from '@/lib/data';
+import { Footer, Hero, Nav, NetworkCta, TwoDoors, WireAndSteps } from '@/components/Sections';
+import { getCounts, getWire } from '@/lib/data';
 import { safeExternal } from '@/lib/safe';
 
 export const metadata: Metadata = {
@@ -11,11 +11,9 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function AboutHomePage() {
-  const [campaigns, wire, counts, picks] = await Promise.all([
-    getCampaigns('hot', 6),
+  const [wire, counts] = await Promise.all([
     getWire(4),
     getCounts(),
-    getTeamPicks(),
   ]);
   const discord = safeExternal(process.env.NEXT_PUBLIC_DISCORD_INVITE, '#');
 
@@ -31,11 +29,8 @@ export default async function AboutHomePage() {
           budget={counts.budget}
         />
         <TwoDoors discord={discord} />
-        <TeamPicks picks={picks} />
-        <LiveBoard campaigns={campaigns} />
         <WireAndSteps events={wire} />
         <NetworkCta />
-        <FinalCta discord={discord} />
       </main>
       <Footer discord={discord} />
     </>
