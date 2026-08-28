@@ -108,10 +108,10 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
   const noPicks = sort === 'picks' && !campaigns.some((c) => c.teamPick);
 
   return (
-    <div id="hub" className="wrap" style={{ paddingTop: 24, paddingBottom: 56, display: 'flex', flexDirection: 'column', gap: 18 }}>
+    <div id="hub" className="wrap" style={{ paddingTop: 18, paddingBottom: 48, display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* title row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 20, flexWrap: 'wrap' }}>
-        <h2 style={{ fontSize: 24, fontWeight: 700 }}>Campaign Hub</h2>
+        <h2 style={{ fontSize: 19, fontWeight: 700 }}>Campaign Hub</h2>
         {freshness && (
           <span className="pill pill-neutral">
             <span className="dot" />
@@ -129,9 +129,9 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
           placeholder="Search campaigns"
           aria-label="Search campaigns by name"
           style={{
-            padding: '10px 14px', borderRadius: 10, minHeight: 44, minWidth: 220, flex: '0 1 280px',
+            padding: '9px 13px', borderRadius: 9, minHeight: 40, minWidth: 210, flex: '0 1 260px',
             border: '1.5px solid var(--cream-line)', background: 'var(--cream-card)',
-            color: 'var(--ink)', fontSize: 14.5, fontFamily: 'inherit',
+            color: 'var(--ink)', fontSize: 14, fontFamily: 'inherit',
           }}
         />
         {platforms.length > 0 && (

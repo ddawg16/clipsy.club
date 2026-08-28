@@ -67,11 +67,11 @@ export function SiteNav({ discord }: { discord: string }) {
     >
       <div
         className="wrap"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 76, gap: 20, flexWrap: 'wrap' }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 58, gap: 18, flexWrap: 'wrap' }}
       >
         <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <Logo size={36} />
-          <span className="display" style={{ fontSize: 21, fontWeight: 700 }}>
+          <Logo size={28} />
+          <span className="display" style={{ fontSize: 18, fontWeight: 700 }}>
             Clipsy
           </span>
         </a>
@@ -81,8 +81,8 @@ export function SiteNav({ discord }: { discord: string }) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 24,
-            fontSize: 14.5,
+            gap: 20,
+            fontSize: 13.5,
             fontWeight: 500,
             flexWrap: 'wrap',
             justifyContent: 'center',
@@ -106,8 +106,8 @@ export function SiteNav({ discord }: { discord: string }) {
                     cursor: 'pointer',
                     font: 'inherit',
                     color: on ? 'var(--ink)' : 'inherit',
-                    padding: '8px 0',
-                    minHeight: 44,
+                    padding: '6px 0',
+                    minHeight: 38,
                   }}
                 >
                   {menu.label}
@@ -161,7 +161,7 @@ export function SiteNav({ discord }: { discord: string }) {
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-          <a className="btn btn-primary" href="/brands" style={{ padding: '11px 18px', fontSize: 14 }}>
+          <a className="btn btn-primary" href="/brands" style={{ padding: '9px 15px', fontSize: 13 }}>
             Start a campaign
           </a>
         </div>

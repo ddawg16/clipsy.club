@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { CampaignHub } from '@/components/CampaignHub';
-import { AppShell } from '@/components/AppShell';
-import { Footer, PageHeader } from '@/components/Sections';
+import { Nav, Footer, PageHeader } from '@/components/Sections';
 import { getCampaigns, getCounts, getLastRun } from '@/lib/data';
 import { freshness } from '@/lib/format';
 import { safeExternal } from '@/lib/safe';
@@ -27,8 +26,9 @@ export default async function BoardPage() {
   const discord = safeExternal(process.env.NEXT_PUBLIC_DISCORD_INVITE, '#');
 
   return (
-    <AppShell discord={discord}>
-        <main>
+    <>
+      <Nav discord={discord} />
+      <main>
         <PageHeader
           compact
           eyebrow="The board"
@@ -41,8 +41,8 @@ export default async function BoardPage() {
           }
         />
         <CampaignHub campaigns={campaigns} freshness={freshness(lastRun)} />
-        </main>
-        <Footer discord={discord} />
-    </AppShell>
+      </main>
+      <Footer discord={discord} />
+    </>
   );
 }

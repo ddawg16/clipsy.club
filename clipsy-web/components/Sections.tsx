@@ -36,7 +36,7 @@ export function PageHeader({
         <div
           className="wrap"
           style={{
-            padding: '20px 32px',
+            padding: '14px 32px',
             display: 'flex',
             alignItems: 'baseline',
             justifyContent: 'space-between',
@@ -44,7 +44,7 @@ export function PageHeader({
             flexWrap: 'wrap',
           }}
         >
-          <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.2 }}>{title}</h1>
+          <h1 style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.2 }}>{title}</h1>
           {meta}
         </div>
       </div>

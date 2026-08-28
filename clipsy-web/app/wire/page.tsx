@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { AppShell } from '@/components/AppShell';
-import { Footer, PageHeader, WireFeed } from '@/components/Sections';
+import { Nav, Footer, PageHeader, WireFeed } from '@/components/Sections';
 import { getWire } from '@/lib/data';
 import { safeExternal } from '@/lib/safe';
 
@@ -17,8 +16,8 @@ export default async function WirePage() {
 
   return (
     <>
-      <AppShell discord={discord}>
-        <main>
+      <Nav discord={discord} />
+      <main>
         <PageHeader
           eyebrow="The Wire"
           title="Nobody tells you when a network quietly cuts rates."
@@ -27,9 +26,8 @@ export default async function WirePage() {
         <div className="wrap section">
           <WireFeed events={events} full />
         </div>
-        </main>
-        <Footer discord={discord} />
-      </AppShell>
+      </main>
+      <Footer discord={discord} />
     </>
   );
 }
