@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, Work_Sans } from 'next/font/google';
 import './globals.css';
 
@@ -29,6 +29,13 @@ export const metadata: Metadata = {
     type: 'website',
   },
   robots: { index: true, follow: true },
+};
+
+// Without this, phones render the page zoomed out at ~980px and everything looks tiny.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#faf1d8',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

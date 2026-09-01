@@ -44,5 +44,6 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          CLIPSY_PARTNERS_CSV_URL: ${{ secrets.CLIPSY_PARTNERS_CSV_URL }}
           WHOP_API_KEY: ${{ secrets.WHOP_API_KEY }}
           WHOP_ENDPOINT: ${{ secrets.WHOP_ENDPOINT }}

@@ -233,3 +233,14 @@ button:focus-visible {
   .shell-rail .rail-hide-sm { display: none; }
   .rail-link { white-space: nowrap; padding: 8px 12px; }
 }
+
+/* ---------------------------------------------------- phone polish
+   The layout already reflows (grids use auto-fill, nav wraps). These are
+   just small-screen tightenings so nothing feels cramped under ~520px. */
+@media (max-width: 520px) {
+  .wrap { padding-left: 18px; padding-right: 18px; }
+  /* let the campaign search box use the full width instead of holding 210px */
+  #hub input[type='search'] { min-width: 0; flex: 1 1 100% !important; }
+  /* never let the page scroll sideways on a phone */
+  html, body { overflow-x: hidden; }
+}
