@@ -20,3 +20,17 @@ npm-debug.log*
 # build cruft that should never be in the repo
 *.zip
 *.bak
+
+# --- private business notes (never in the public repo) ---
+brand-profiles/
+campaigns/
+resources/
+competition-tracker.md
+Meme Page/
+Streamer Clips Page/
+
+# --- local junk ---
+.DS_Store
+*.zip
+*.bak
+_*test*

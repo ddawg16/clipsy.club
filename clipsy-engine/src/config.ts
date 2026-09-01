@@ -49,6 +49,9 @@ export const config = {
     cookie: env('CLIPPINGNET_COOKIE'),
   },
 
+  /** Published-CSV URL of the partner campaigns Google Sheet. Unset = adapter off. */
+  partnersCsvUrl: env('CLIPSY_PARTNERS_CSV_URL'),
+
   /** Campaigns not seen in this many consecutive runs are marked pulled. */
   missingRunsBeforePulled: Number(env('MISSING_RUNS_BEFORE_PULLED') ?? 2),
 
