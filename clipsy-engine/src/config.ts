@@ -50,7 +50,10 @@ export const config = {
   },
 
   /** Published-CSV URL of the partner campaigns Google Sheet. Unset = adapter off. */
-  partnersCsvUrl: env('CLIPSY_PARTNERS_CSV_URL'),
+  // Public published-CSV link of the partner sheet. It's a public URL (the sheet
+  // only holds campaign listings that go on the public site), so it's committed
+  // here as the default — no secret to set. Override with the env var if it ever changes.
+  partnersCsvUrl: env('CLIPSY_PARTNERS_CSV_URL') ?? 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR6S889sZ_n0rMRnRVFSoz8eZUWBT673BA5_C0nuOTngHM2SA-OuAjKNmjAx6e1q2cHj471hPzocaT6/pub?gid=400796662&single=true&output=csv',
 
   /** Campaigns not seen in this many consecutive runs are marked pulled. */
   missingRunsBeforePulled: Number(env('MISSING_RUNS_BEFORE_PULLED') ?? 2),

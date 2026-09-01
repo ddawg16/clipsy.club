@@ -29,6 +29,18 @@ export async function ingestAll(): Promise<IngestReport[]> {
     };
 
     try {
+      // Ensure this adapter's source row exists, so campaigns never fail the
+      // foreign key. This replaces the old manual "run 005_partners.sql" step —
+      // any new source self-registers on first run. Never overwrites a source
+      // that's already there (ignoreDuplicates), so hand-set names stay.
+      unwrap(
+        await db()
+          .from('sources')
+          .upsert({ id: adapter.id, name: adapter.label, kind: 'manual' }, { onConflict: 'id', ignoreDuplicates: true })
+          .select('id'),
+        `${adapter.id}: ensure source`,
+      );
+
       const fresh = await adapter.fetchCampaigns();
       report.fetched = fresh.length;
 

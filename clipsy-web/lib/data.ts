@@ -24,6 +24,7 @@ type Row = {
   id: string;
   name: string;
   source_id: string;
+  brand: string | null;
   url: string | null;
   rate_cpm: number | null;
   min_views: number | null;
@@ -51,7 +52,9 @@ function toCampaign(r: Row): Campaign {
   return {
     id: r.id,
     name: r.name,
-    source: src?.name ?? r.source_id,
+    // Partner campaigns (from the Google Sheet) show as "via <partner>" so each
+    // partner is its own badge and Network filter, like "via Clipster".
+    source: r.source_id === 'partners' && r.brand ? `via ${r.brand}` : (src?.name ?? r.source_id),
     url: r.url,
     rateCpm: r.rate_cpm,
     minViews: r.min_views,
@@ -74,7 +77,7 @@ function toCampaign(r: Row): Campaign {
 }
 
 const SELECT =
-  'id, name, source_id, url, rate_cpm, min_views, platforms, ends_at, heat, effort_label, effort_score, payout_days, ' +
+  'id, name, source_id, brand, url, rate_cpm, min_views, platforms, ends_at, heat, effort_label, effort_score, payout_days, ' +
   'icon_url, brief_url, platform_rates, budget_total, budget_used_pct, category, team_pick, team_note, team_rank, sources(name)';
 
 /**

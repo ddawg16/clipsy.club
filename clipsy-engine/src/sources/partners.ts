@@ -64,9 +64,14 @@ export const partners: SourceAdapter = {
     if (lines.length < 2) return [];
 
     const header = parseCsvLine(lines[0]).map((h) => h.toLowerCase().replace(/\s+/g, '_'));
-    const col = (row: string[], name: string): string => {
-      const i = header.indexOf(name);
-      return i >= 0 && i < row.length ? row[i] : '';
+    // Accept common header variations so a sheet works whether the user wrote
+    // "platform" or "platforms", "min_view" or "min_views", etc.
+    const col = (row: string[], ...names: string[]): string => {
+      for (const name of names) {
+        const i = header.indexOf(name);
+        if (i >= 0 && i < row.length && row[i] !== '') return row[i];
+      }
+      return '';
     };
 
     const out: RawCampaign[] = [];
@@ -79,15 +84,15 @@ export const partners: SourceAdapter = {
       const status = (col(row, 'status') || 'active').toLowerCase();
       if (status !== 'active') continue;
 
-      const rate = Number(col(row, 'rate_per_100k'));
+      const rate = Number(col(row, 'rate_per_100k', 'rate', 'rate_per_100000'));
       const rateCpm = Number.isFinite(rate) && rate > 0 ? rate : null;
 
-      const platforms = col(row, 'platforms')
+      const platforms = col(row, 'platforms', 'platform')
         .split(',')
         .map((p) => p.trim().toLowerCase())
         .filter(Boolean);
 
-      const minRaw = Number(col(row, 'min_views'));
+      const minRaw = Number(col(row, 'min_views', 'min_view', 'minimum_views'));
       const minViews = Number.isFinite(minRaw) && minRaw > 0 ? Math.round(minRaw) : null;
 
       const partner = cleanText(col(row, 'partner'));
