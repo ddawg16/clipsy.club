@@ -56,21 +56,28 @@ export async function ingestAll(): Promise<IngestReport[]> {
 
       for (const raw of fresh) {
         seen.add(raw.externalId);
-        const before = byExternalId.get(raw.externalId) ?? null;
-        const row = await upsertCampaign(raw, before);
-        if (before) report.updated += 1;
-        else report.created += 1;
+        // Each row writes independently. A single bad row (weird value, one-off
+        // DB hiccup) is logged and skipped — it must never abort the other rows.
+        // This is why one malformed campaign can't take the whole source down.
+        try {
+          const before = byExternalId.get(raw.externalId) ?? null;
+          const row = await upsertCampaign(raw, before);
+          if (before) report.updated += 1;
+          else report.created += 1;
 
-        events.push(...diffCampaign(before, raw, { campaignId: row.id, sourceLabel: adapter.label }));
+          events.push(...diffCampaign(before, raw, { campaignId: row.id, sourceLabel: adapter.label }));
 
-        snapshots.push({
-          campaign_id: row.id,
-          rate_cpm: raw.rateCpm ?? null,
-          min_views: raw.minViews ?? null,
-          status: raw.status ?? 'active',
-          ends_at: raw.endsAt ?? null,
-          payload: clampPayload(raw.raw ?? null),
-        });
+          snapshots.push({
+            campaign_id: row.id,
+            rate_cpm: raw.rateCpm ?? null,
+            min_views: raw.minViews ?? null,
+            status: raw.status ?? 'active',
+            ends_at: raw.endsAt ?? null,
+            payload: clampPayload(raw.raw ?? null),
+          });
+        } catch (rowErr) {
+          console.error(`[${adapter.id}] skipped row "${raw.externalId}": ${rowErr instanceof Error ? rowErr.message : String(rowErr)}`);
+        }
       }
 
       // Anything active we did NOT see this run. Nobody else reports these.
@@ -104,6 +111,7 @@ export async function ingestAll(): Promise<IngestReport[]> {
       await db().from('sources').update({ last_run_at: new Date().toISOString(), last_error: report.error }).eq('id', adapter.id);
     }
 
+    console.log(`[ingest] ${report.source}: fetched ${report.fetched}, created ${report.created}, updated ${report.updated}, pulled ${report.pulled}${report.error ? ', ERROR: ' + report.error : ''}`);
     reports.push(report);
   }
 
