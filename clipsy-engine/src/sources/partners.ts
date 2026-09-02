@@ -97,6 +97,20 @@ export const partners: SourceAdapter = {
 
       const partner = cleanText(col(row, 'partner'));
 
+      // Optional budget columns so a partner can show a "budget left" bar just
+      // like the scraped networks. Give budget_total plus either budget_remaining
+      // (dollars still in the pool) or budget_used_pct (percent already claimed).
+      const bTotal = Number(col(row, 'budget_total', 'budget', 'pool'));
+      const budgetTotalVal = Number.isFinite(bTotal) && bTotal > 0 ? bTotal : null;
+      const bRemaining = Number(col(row, 'budget_remaining', 'remaining', 'budget_left'));
+      const bUsedExplicit = Number(col(row, 'budget_used_pct', 'claimed_pct', 'used_pct'));
+      let budgetUsedPct: number | null = null;
+      if (budgetTotalVal != null && Number.isFinite(bRemaining) && bRemaining >= 0) {
+        budgetUsedPct = Math.max(0, Math.min(100, Math.round(((budgetTotalVal - bRemaining) / budgetTotalVal) * 100)));
+      } else if (Number.isFinite(bUsedExplicit) && bUsedExplicit >= 0) {
+        budgetUsedPct = Math.max(0, Math.min(100, Math.round(bUsedExplicit)));
+      }
+
       out.push({
         sourceId: 'partners',
         externalId: slug(partner ? `${partner}-${name}` : name) || slug(url),
@@ -112,8 +126,8 @@ export const partners: SourceAdapter = {
         iconUrl: safeUrl(col(row, 'icon_url') || null),
         briefUrl: null,
         platformRates: rateCpm != null ? platforms.map((p) => ({ platform: p, rate: rateCpm })) : [],
-        budgetTotal: null,
-        budgetUsedPct: null,
+        budgetTotal: budgetTotalVal,
+        budgetUsedPct,
         payoutMethod: null,
         category: cleanText(col(row, 'category')),
         raw: { partner, via: 'google-sheet' },

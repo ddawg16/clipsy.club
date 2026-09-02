@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Footer, Nav } from '@/components/Sections';
 import { getCampaign, getRelated } from '@/lib/data';
-import { payout, rate, timeLeft, views } from '@/lib/format';
+import { payout, rate, timeLeft, views, dollars } from '@/lib/format';
 import { safeExternal, safeHref } from '@/lib/safe';
 import { PlatformIcon } from '@/components/Logo';
 
@@ -109,23 +109,33 @@ export default async function CampaignPage({ params }: Props) {
               </div>
             )}
 
-            {c.budgetUsedPct !== null && (
+            {(c.budgetTotal != null || c.budgetUsedPct !== null) && (() => {
+              const usedPct = Math.max(0, Math.min(100, c.budgetUsedPct ?? 0));
+              const remainPct = 100 - usedPct;
+              const remaining = c.budgetTotal != null ? c.budgetTotal * (remainPct / 100) : null;
+              return (
               <div>
                 <span className="eyebrow" style={{ display: 'block', marginBottom: 14 }}>Pool</span>
                 <div className="card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                    <span style={{ fontSize: 14.5, color: 'var(--ink-soft)' }}>Claimed so far</span>
-                    <span className="display tabular" style={{ fontSize: 20, fontWeight: 700 }}>{c.budgetUsedPct}%</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 10 }}>
+                    <span style={{ fontSize: 14.5, color: 'var(--ink-soft)' }}>Budget left</span>
+                    <span className="display tabular" style={{ fontSize: 20, fontWeight: 700 }}>
+                      {remaining != null ? dollars(remaining) : `${remainPct}%`}
+                      {c.budgetTotal != null && (
+                        <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-faint)' }}> of {dollars(c.budgetTotal)}</span>
+                      )}
+                    </span>
                   </div>
                   <div style={{ height: 8, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${c.budgetUsedPct}%`, background: 'var(--accent)', borderRadius: 999 }} />
+                    <div style={{ height: '100%', width: `${remainPct}%`, background: 'var(--green)', borderRadius: 999 }} />
                   </div>
                   <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0, lineHeight: 1.5 }}>
-                    A pool near capacity pays out slower and rejects more. Below 20% usually means room to work.
+                    {usedPct >= 80 ? 'This pool is nearly claimed - payouts slow and rejections rise near capacity.' : 'Money still on the table. The lower the claim, the more room to work.'}
                   </p>
                 </div>
               </div>
-            )}
+              );
+            })()}
 
             <div>
               <span className="eyebrow" style={{ display: 'block', marginBottom: 14 }}>Our read</span>

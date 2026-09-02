@@ -1,5 +1,5 @@
 import type { Campaign } from '@/lib/types';
-import { rate, timeLeft } from '@/lib/format';
+import { rate, timeLeft, money, dollars } from '@/lib/format';
 import { PlatformIcon } from './Logo';
 
 /**
@@ -94,14 +94,28 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
           {c.minViews == null ? 'No view minimum' : `Min ${new Intl.NumberFormat('en-US', { notation: 'compact' }).format(c.minViews)} views to qualify`}
         </span>
 
-        {c.budgetUsedPct !== null && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-            <div style={{ flex: 1, height: 5, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${c.budgetUsedPct}%`, background: 'var(--accent)', borderRadius: 999 }} />
+        {(c.budgetTotal != null || c.budgetUsedPct !== null) && (() => {
+          const usedPct = Math.max(0, Math.min(100, c.budgetUsedPct ?? 0));
+          const remainPct = 100 - usedPct;
+          const remaining = c.budgetTotal != null ? c.budgetTotal * (remainPct / 100) : null;
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
+                <span className="tabular" style={{ fontSize: S.meta, fontWeight: 700, color: 'var(--ink)' }}>
+                  {remaining != null ? `${dollars(remaining)} left` : `${remainPct}% left`}
+                </span>
+                {c.budgetTotal != null && (
+                  <span className="tabular" style={{ fontSize: compact ? 11 : 11.5, color: 'var(--ink-faint)' }}>
+                    of {money(c.budgetTotal)}
+                  </span>
+                )}
+              </div>
+              <div style={{ height: 5, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${remainPct}%`, background: 'var(--green)', borderRadius: 999 }} />
+              </div>
             </div>
-            <span className="tabular" style={{ fontSize: compact ? 11 : 11.5, color: 'var(--ink-faint)' }}>{c.budgetUsedPct}% claimed</span>
-          </div>
-        )}
+          );
+        })()}
 
         {pick && c.teamNote && (
           <p style={{ fontSize: S.note, color: 'var(--ink)', margin: 0, lineHeight: 1.45, paddingTop: 8, borderTop: '1px solid var(--cream-line)' }}>
