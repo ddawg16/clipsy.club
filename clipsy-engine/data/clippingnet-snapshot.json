@@ -1,0 +1,533 @@
+{
+"generatedAt": "2026-09-02T16:46:18.384890+00:00",
+"note": "One-time snapshot of clipping.net's authenticated campaign board, imported with the operator's permission. clipping.net exposes no remaining-budget field, so budget is intentionally omitted. Replace with a live feed when clipping.net provides one.",
+"campaigns": [
+{
+"n": "iGaming x Clipping",
+"s": "igaming-x-clipping",
+"a": 60,
+"i": "1414948370883280990/caab9a0d3f5cbc1ca8676f6c0ca7e060.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 32,
+"bo": 1,
+"tg": "other"
+},
+{
+"n": "JasonTheWeen x Clipping",
+"s": "jasontheween-x-clipping",
+"a": 50,
+"i": "1497475896372629626/109b2b23ea2f31ab0fd2f4256bba8b88.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 700000,
+"d": 300,
+"bo": 1,
+"tg": "irl-content"
+},
+{
+"n": "PlaqueBoyMax x Clipping",
+"s": "plaqueboymax-x-clipping",
+"a": 50,
+"i": "1335496609231929346/708791c31bc67272cbb8a61d60a70d63.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 500000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/14vQvB96kRqwWgwgph553vH3ibKgdqTPRrx-CKkreGkg/edit",
+"tg": "irl-content"
+},
+{
+"n": "Lacy x Clipping",
+"s": "lacy-x-clipping",
+"a": 0,
+"i": "1194400486690934825/5640aa5f2a5b30f1c011ef632a377a4d.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 500000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1_-Ij4g6JcnGv6TTtZkNim-QcYanmmJr50LhdOxpXVow/edit",
+"tg": "irl-content"
+},
+{
+"n": "ICEMAN x Clipping",
+"s": "iceman-x-clipping",
+"a": 30,
+"i": "1505032208539324548/43186fa0eeff189014d5ebb3208d6dd0.png",
+"p": [
+"instagram",
+"x"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1KSpXy73AoN4NxCEp-5Ym45P93bcAIil5gkjCZvsaJkw/edit",
+"tg": "music"
+},
+{
+"n": "Michael Carbonara x Clipping",
+"s": "michael-carbonara-x-clipping",
+"a": 160,
+"i": "1293415726312460379/044222af4c595d3237a4b94fd2c9fd97.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1
+},
+{
+"n": "Skylar Mae x Clipping",
+"s": "skylar-mae-x-clipping",
+"a": 30,
+"i": "1302287574374813746/8dcdb4f2a832cb72222a5ac70b1228c9.png",
+"p": [
+"tiktok",
+"instagram",
+"x"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1i_b9Q-3uO-hmBgJaEaaycvAWsNvsAFwJXOTulGXza4M/edit",
+"tg": "other"
+},
+{
+"n": "Clix & Lacy - TapCap x Clipping",
+"s": "clix-lacy-tapcap-x-clipping",
+"a": 50,
+"i": "1472077822892838912/ed70db9ff0327775282d9b8530942b93.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 200000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1X6xmBZMXGGTZI4s_fJa7NeAVKJJdoFJT1lykctTEiLA/edit",
+"tg": "brands"
+},
+{
+"n": "GFuel x Clipping",
+"s": "gfuel-x-clipping",
+"a": 0,
+"i": "1541882211525984358/2b1ccca3c066daf65064e0819233a8af.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 31,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1tFpHCr5SP3QExvY0Sl07N9qiKlQTx0nFwcMswHS9EWo/edit",
+"tg": "gaming"
+},
+{
+"n": "By Any Means x Clipping",
+"s": "by-any-means-x-clipping",
+"a": 0,
+"i": "1537611766769520740/8cb751a93b42bf5947022d839690b57a.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 31,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1khwXLG4HPvLyFdoMs7aC-aeSEeyyA3IdeXulxgo63U4/edit",
+"tg": "irl-content"
+},
+{
+"n": "Atlantic Music x Clipping",
+"s": "atlantic-music-x-clipping",
+"a": 0,
+"i": "1537174368218652792/1a683a431af7bd27915c026ab062d421.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 31,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1f88fF9vadHTfRjf7qu8oTZk0aiIH39VeiGvQJX7bzq8/edit",
+"tg": "music"
+},
+{
+"n": "End of Oak Street x Clipping",
+"s": "end-of-oak-street-x-clipping",
+"a": 0,
+"i": "1536135251930128426/f7a8811894b93cf432b4d266e81e737f.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 31,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1eqqkieogXRrcz5FgUEoo3ENUWL_2ItJvJB6ZM9LQGgg/edit",
+"tg": "irl-content"
+},
+{
+"n": "Warner Japan x Clipping",
+"s": "warner-japan-x-clipping",
+"a": 0,
+"i": "1535870099783942237/487767dcc223a3495ce0e480cb425dab.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 31,
+"bo": 1,
+"b": "https://docs.google.com/document/d/14pgqXQW3B8MJ1Tc9DUmC5FnSk4e1DrsUGD1uO8q7dkQ/edit",
+"tg": "music"
+},
+{
+"n": "Kyliebud x Clipping",
+"s": "kyliebud-x-clipping",
+"a": 100,
+"i": "1535100266381058138/fa2d44a88df156c6cf6f1ea73f743cda.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 31,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1wnCETQfB7s9uDmrewMwKx7lovfMWbfRosBWyaGnJxh8/edit",
+"tg": "irl-content"
+},
+{
+"n": "Dunkman League x Clipping",
+"s": "dunkman-league-x-clipping",
+"a": 50,
+"i": "1531787319080910888/919f57a66339907dec1dc5bf730bd587.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1xnYYO8kaM8X33FlvLrpVygYgaEWr4ocjY7ui8Q8ouqY/edit",
+"tg": "sports"
+},
+{
+"n": "Zeds Dead x Clipping",
+"s": "zeds-dead-x-clipping",
+"a": 100,
+"i": "1526738442120204442/ec0903174b9d489b6dcea0567581f6e9.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1Qf9shss8anxEtWGBPuAAkVrHhv3VEkBUszrtlneE8cA/edit",
+"tg": "irl-content"
+},
+{
+"n": "CSGORoll x Clipping",
+"s": "csgoroll-x-clipping",
+"a": 50,
+"i": "1516863837846896690/bdf7a078660c80fc0fc8a55618902cb4.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1mSxOjwIJZHwixCZIaGvp8bHqdzwnm0-4y0Bd9ACkOR4/edit",
+"tg": "irl-content"
+},
+{
+"n": "John Malek x Clipping",
+"s": "john-malek-x-clipping",
+"a": 50,
+"i": "1504156811253518509/7cba49af0648897f888b87a58a416596.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1CbJmKO87KUn3NlGK8SmcK1VNTSwcpB_QbFd9a7U2xew/edit",
+"tg": "irl-content"
+},
+{
+"n": "Doublelift x Clipping",
+"s": "doublelift-x-clipping",
+"a": 125,
+"i": "1499196247494623293/78bed12bce158f87ba79e904808376cb.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1XNZxiDR__hpneFlLFMoqGp1p35j1gKR2HoT2FvlaltQ/edit",
+"tg": "gaming"
+},
+{
+"n": "SportsDream x Clipping",
+"s": "sportsdream-x-clipping",
+"a": 200,
+"i": "1498928290008666132/4370531aaa86d75504f3ca218e56466f.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/114Gs2qOAI-9bEAvF14OKu8XSg0t5MwTv5GWRPKuvaPs/edit",
+"tg": "gambling"
+},
+{
+"n": "Dunkman x Clipping",
+"s": "dunkman-x-clipping",
+"a": 50,
+"i": "1491576727544004699/919f57a66339907dec1dc5bf730bd587.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 50000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/10I9Z4UriGH3hc7i2e0ryM8Pt8z4arGweV5NS5xP6_kY/edit",
+"tg": "irl-content"
+},
+{
+"n": "Caleb Hammer x Clipping",
+"s": "caleb-hammer-x-clipping",
+"a": 50,
+"i": "1488686327812587690/02ae565a583ce7a4d6a7c2a11aae588d.png",
+"p": [
+"tiktok",
+"instagram",
+"x"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1SH8aIepEBxT4Pit-tCwaVWBHo-Qoyo4lV1QAM9k3boE/edit",
+"tg": "podcasts"
+},
+{
+"n": "Club Cumming x Clipping",
+"s": "club-cumming-x-clipping",
+"a": 50,
+"i": "1488663658048524469/d23698d307efe67c747e6b878c1d405b.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1fVuyeEGDdGcAUzv8t-5hzpI_LWYBCmJd9mRgQ4UzvUY/edit",
+"tg": "irl-content"
+},
+{
+"n": "Marlon x Clipping",
+"s": "marlon-x-clipping",
+"a": 50,
+"i": "1487304403638554764/b5bcd68d4cfdd9d4727265921e898d2f.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1Q4a3ekdB5LGc1dGlZmltedLnKfWaLdNfGQj7D70_ZSU/edit",
+"tg": "irl-content"
+},
+{
+"n": "Man On x Clipping",
+"s": "man-on-x-clipping",
+"a": 50,
+"i": "1486769608852639925/258c3b2bbc8811991d27e74cbb337af2.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 100000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1eY0ZcfzaTs3f34Y4qVYbhtRNEnDuIQkgSk_5ILLRCVc/edit",
+"tg": "irl-content"
+},
+{
+"n": "HiggsField x Clipping",
+"s": "higgsfield-x-clipping",
+"a": 100,
+"i": "1484274609779114104/f755d67a80d64f86589f518285fd92e5.png",
+"p": [
+"instagram"
+],
+"mv": 50000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1WaL5Y4F5c0k-WtYlpg0jIdVBOQ3KYQiMZJ6XFc2_NRs/edit",
+"tg": "irl-content"
+},
+{
+"n": "Alex Monahan x Clipping",
+"s": "alex-monahan-x-clipping",
+"a": 50,
+"i": "1480625336671797411/9e1001fc4a678be13fff04d4377f9c5e.png",
+"p": [
+"tiktok",
+"youtube"
+],
+"mv": 100000,
+"d": 1000,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1x3XtlFYexRwawxr3C6iujm3VWaRD207YcOtAaaHdTAQ/edit",
+"tg": "irl-content"
+},
+{
+"n": "Montana Tucker x Clipping",
+"s": "montana-tucker-x-clipping",
+"a": 250,
+"i": "1468075207267848327/6fd6e0cda1530abe6bbf22b2abaacfc2.png",
+"p": [
+"tiktok",
+"instagram"
+],
+"mv": 50000,
+"d": 1000,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1_T6KmFduy9c6ev9CUipsBfK13iYEIWFtJe_5bGqTpIM/edit",
+"tg": "irl-content"
+},
+{
+"n": "RuPaul's Drag Race: UK vs the World x Clipping",
+"s": "rupauls-drag-race-uk-vs-the-world-x-clipping",
+"a": 200,
+"i": "1465935408331358404/8db1542396ce9fd7af3c9695a119a990.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 50000,
+"d": 1000,
+"bo": 1,
+"tg": "irl-content"
+},
+{
+"n": "Dave Asprey x Clipping",
+"s": "dave-asprey-x-clipping",
+"a": 50,
+"i": "1465476353791889610/32ddaec7488ba91e35f7497497a2293b.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 50000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/119esMKgSNb4vh7JSkZLE2jVwFiTMoWDmvUn6O3A8jvI/edit",
+"tg": "podcasts"
+},
+{
+"n": "Netflix Comedy x Clipping",
+"s": "netflix-comedy-x-clipping",
+"a": 65,
+"i": "1458654675954962466/ec634dc1a007b6e315adc8045d1ff827.png",
+"p": [
+"instagram"
+],
+"mv": 50000,
+"d": 1000,
+"bo": 1,
+"b": "https://docs.google.com/document/d/1XwSlHJuJG6x3hY-doMX6NFvUI1YxLgOPl_qtCzD5aAs/edit",
+"tg": "irl-content"
+},
+{
+"n": "James Sexton x Clipping",
+"s": "james-sexton-x-clipping",
+"a": 50,
+"i": "1446653008036364369/a7f0073241b776cbad116651c41a8fde.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube"
+],
+"mv": 25000,
+"d": 300,
+"bo": 1,
+"b": "https://docs.google.com/document/d/17hrsLBSGkqbhz9a46DFYgvmZGa1M3d_w1kWy-l0qo9A/edit",
+"tg": "podcasts"
+},
+{
+"n": "Canada's Drag Race x Clipping",
+"s": "canadas-drag-race-x-clipping",
+"a": 100,
+"i": "1439412004300525649/5cd971598b9280b55e54b78086582a0f.png",
+"p": [
+"tiktok",
+"instagram",
+"youtube",
+"x"
+],
+"mv": 25000,
+"d": 300,
+"bo": 1,
+"tg": "irl-content"
+}
+]
+}
