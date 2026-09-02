@@ -2,58 +2,55 @@
 
 import { useMemo, useState } from 'react';
 import type { Campaign, SortKey } from '@/lib/types';
+import { NICHE_ORDER } from '@/lib/niche';
 import { CampaignCard } from './CampaignCard';
 
 const TABS: Array<{ id: SortKey; label: string; note: string }> = [
   {
+    id: 'picks',
+    label: 'Top team picks',
+    note: 'Your hand-picked campaigns first, in the order you set them — then everything else by heat. This is the default view.',
+  },
+  {
     id: 'hot',
     label: 'Hottest',
-    note: 'Heat = 45% where the rate sits against the rest of the board, 35% how recently it appeared, 20% how close it is to closing. Hot means competitive, not easy.',
+    note: 'Heat = how hard a campaign is running right now: how its rate compares to the rest of the board (35%), how recently it launched (25%), how soon it closes (15%), how many platforms it runs on (10%), and — where we know it — how much of the budget is already claimed (15%). High heat means crowded and competitive, not easy.',
   },
   {
     id: 'easy',
     label: 'Easiest to get paid',
-    note: 'Effort = 55% how low the view minimum is, 45% how fast the payout cycle is. Start here if you have never been paid for a clip.',
+    note: 'Effort = how likely you are to actually get approved and paid: mostly how low the view minimum is versus the board (50%), plus how much budget is still unclaimed (25%), how fast the payout cycle is (15%), and platform reach (10%). Start here if you have never been paid for a clip.',
   },
   {
     id: 'rate',
     label: 'Best rate',
-    note: 'Straight CPM, highest first. Worth saying: the highest rate is almost never the easiest money, and it usually carries the highest view minimum.',
-  },
-  {
-    id: 'picks',
-    label: 'Top team picks',
-    note: 'Chosen by hand, not by the algorithm — low view minimums, readable briefs, and payouts that actually land. Our picks come first, then the rest by heat.',
+    note: 'Straight CPM — the highest dollar-per-100k-views first, with ties broken by which is easier to get paid. Worth saying: the top rate is rarely the easiest money, and usually carries the highest view minimum.',
   },
 ];
 
-const PLATFORM_LABEL: Record<string, string> = {
-  tiktok: 'TikTok',
-  instagram: 'Instagram',
-  youtube: 'YouTube',
-  x: 'X',
-  twitter: 'X',
-};
-const label = (p: string) => PLATFORM_LABEL[p.toLowerCase()] ?? p;
-
-const PAGE = 25;
+// Deterministic tie-breaker so the order is never arbitrary: heat, then rate,
+// then effort, then name. Two cards only tie when every real input ties.
+const tie = (a: Campaign, b: Campaign): number =>
+  b.heat - a.heat ||
+  (b.rateCpm ?? -1) - (a.rateCpm ?? -1) ||
+  b.effortScore - a.effortScore ||
+  a.name.localeCompare(b.name);
 
 function sortCampaigns(list: Campaign[], key: SortKey): Campaign[] {
   const copy = [...list];
   switch (key) {
     case 'easy':
-      return copy.sort((a, b) => b.effortScore - a.effortScore);
+      return copy.sort((a, b) => b.effortScore - a.effortScore || tie(a, b));
     case 'rate':
-      return copy.sort((a, b) => (b.rateCpm ?? -1) - (a.rateCpm ?? -1));
+      return copy.sort((a, b) => (b.rateCpm ?? -1) - (a.rateCpm ?? -1) || b.effortScore - a.effortScore || tie(a, b));
     case 'picks':
-      // Team picks first (by their hand-set rank), everything else by heat.
       return copy.sort((a, b) => {
         if (a.teamPick !== b.teamPick) return a.teamPick ? -1 : 1;
         if (a.teamPick && b.teamPick) return (a.teamRank ?? 99) - (b.teamRank ?? 99);
-        return b.heat - a.heat;
+        return b.heat - a.heat || tie(a, b);
       });
-    default:
-      return copy.sort((a, b) => b.heat - a.heat);
+    default: // 'hot'
+      return copy.sort((a, b) => b.heat - a.heat || tie(a, b));
   }
 }
 
@@ -75,17 +72,23 @@ function Chip({ label, on, onClick }: { label: string; on: boolean; onClick: () 
   );
 }
 
+const PAGE = 25;
+
 export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; freshness?: string }) {
   const [sort, setSort] = useState<SortKey>('picks');
   const [query, setQuery] = useState('');
-  const [platform, setPlatform] = useState<string | null>(null);
+  const [niche, setNiche] = useState<string>('');
   const [source, setSource] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
 
-  const platforms = useMemo(
-    () => [...new Set(campaigns.flatMap((c) => c.platforms))].filter(Boolean).sort(),
-    [campaigns],
-  );
+  // Only offer niches that actually have campaigns, in canonical order, each
+  // with its live count so a clipper can see how deep their lane is.
+  const niches = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const c of campaigns) counts.set(c.niche, (counts.get(c.niche) ?? 0) + 1);
+    return NICHE_ORDER.filter((n) => counts.has(n)).map((n) => ({ name: n, count: counts.get(n)! }));
+  }, [campaigns]);
+
   const sources = useMemo(
     () => [...new Set(campaigns.map((c) => c.source))].filter(Boolean).sort(),
     [campaigns],
@@ -95,17 +98,23 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
     const q = query.trim().toLowerCase();
     return campaigns.filter((c) => {
       if (q && !c.name.toLowerCase().includes(q)) return false;
-      if (platform && !c.platforms.includes(platform)) return false;
+      if (niche && c.niche !== niche) return false;
       if (source && c.source !== source) return false;
       return true;
     });
-  }, [campaigns, query, platform, source]);
+  }, [campaigns, query, niche, source]);
 
   const rows = useMemo(() => sortCampaigns(filtered, sort), [filtered, sort]);
   const visible = showAll ? rows : rows.slice(0, PAGE);
   const active = TABS.find((t) => t.id === sort) ?? TABS[0];
-  const filtersOn = Boolean(query || platform || source);
+  const filtersOn = Boolean(query || niche || source);
   const noPicks = sort === 'picks' && !campaigns.some((c) => c.teamPick);
+
+  const selectStyle: React.CSSProperties = {
+    padding: '9px 13px', borderRadius: 9, minHeight: 40,
+    border: '1.5px solid var(--cream-line)', background: 'var(--cream-card)',
+    color: 'var(--ink)', fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-display), sans-serif', cursor: 'pointer',
+  };
 
   return (
     <div id="hub" className="wrap" style={{ paddingTop: 18, paddingBottom: 48, display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -120,7 +129,7 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
         )}
       </div>
 
-      {/* search + platform */}
+      {/* search + niche */}
       <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
         <input
           type="search"
@@ -134,13 +143,21 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
             color: 'var(--ink)', fontSize: 14, fontFamily: 'inherit',
           }}
         />
-        {platforms.length > 0 && (
-          <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', alignItems: 'center' }}>
-            <span className="eyebrow" style={{ fontSize: 11 }}>Platform</span>
-            {platforms.map((p) => (
-              <Chip key={p} label={label(p)} on={platform === p} onClick={() => { setPlatform(platform === p ? null : p); setShowAll(false); }} />
-            ))}
-          </div>
+        {niches.length > 1 && (
+          <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span className="eyebrow" style={{ fontSize: 11 }}>Niche</span>
+            <select
+              value={niche}
+              onChange={(e) => { setNiche(e.target.value); setShowAll(false); }}
+              aria-label="Filter campaigns by niche"
+              style={selectStyle}
+            >
+              <option value="">All niches ({campaigns.length})</option>
+              {niches.map((n) => (
+                <option key={n.name} value={n.name}>{n.name} ({n.count})</option>
+              ))}
+            </select>
+          </label>
         )}
       </div>
 
@@ -172,7 +189,7 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
       </div>
 
       {/* one-line explanation of the active sort */}
-      <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0, maxWidth: 700, lineHeight: 1.5 }}>{active.note}</p>
+      <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0, maxWidth: 760, lineHeight: 1.5 }}>{active.note}</p>
 
       {/* count + network + clear, on one quiet row */}
       <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -190,7 +207,7 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
         )}
         {filtersOn && (
           <button
-            onClick={() => { setQuery(''); setPlatform(null); setSource(null); setShowAll(false); }}
+            onClick={() => { setQuery(''); setNiche(''); setSource(null); setShowAll(false); }}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontSize: 13.5, fontWeight: 600, color: 'var(--accent)', fontFamily: 'inherit' }}
           >
             Clear filters
@@ -226,8 +243,9 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
       )}
 
       <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0, maxWidth: '68ch', lineHeight: 1.55 }}>
-        Heat is our own score — how hard a campaign is running. Effort is how easy it is to actually get approved and
-        paid. Both scores sharpen as our clippers report outcomes back; for now they run on public signals.
+        Heat and Effort are our own scores, recomputed every time the board refreshes from each campaign&rsquo;s real
+        stats — rate, view minimum, budget left, payout speed and platforms — and ranked against the rest of the board.
+        They sharpen further as our clippers report what actually got approved and paid.
       </p>
     </div>
   );

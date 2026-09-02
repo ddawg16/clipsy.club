@@ -137,32 +137,60 @@ export default async function CampaignPage({ params }: Props) {
               );
             })()}
 
-            <div>
-              <span className="eyebrow" style={{ display: 'block', marginBottom: 14 }}>Our read</span>
-              <div className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }} role="img" aria-label={`Heat ${c.heat} out of 100`}>
-                    <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, c.heat))}%`, background: 'var(--accent)', borderRadius: 999 }} />
+            {(() => {
+              const usedPct = c.budgetUsedPct;
+              const remaining =
+                c.budgetTotal != null && usedPct != null
+                  ? c.budgetTotal * (1 - Math.max(0, Math.min(100, usedPct)) / 100)
+                  : null;
+              const compact = (n: number) => new Intl.NumberFormat('en-US', { notation: 'compact' }).format(n);
+              const plat = (p: string) => (p.toLowerCase() === 'x' ? 'X' : p.charAt(0).toUpperCase() + p.slice(1));
+              // Every line here is a REAL stat pulled from this campaign — these are
+              // exactly what the Heat and Effort scores above are computed from.
+              const signals: Array<{ k: string; v: string }> = [
+                { k: 'Niche', v: c.niche },
+                { k: 'View minimum', v: c.minViews == null ? 'None — anyone qualifies' : `${compact(c.minViews)} views` },
+                { k: 'Rate', v: c.rateCpm != null ? `${rate(c.rateCpm)} / 100k` : 'Bounty / pot based' },
+                { k: 'Budget', v: usedPct != null ? `${usedPct}% claimed${remaining != null ? `, ${dollars(remaining)} left` : ''}` : `Not published by ${c.source}` },
+                { k: 'Platforms', v: c.platforms.length ? c.platforms.map(plat).join(', ') : '—' },
+                { k: 'Payout', v: c.payoutDays != null ? `${c.payoutDays} days` : 'Not published' },
+              ];
+              return (
+                <div>
+                  <span className="eyebrow" style={{ display: 'block', marginBottom: 14 }}>Our read</span>
+                  <div className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }} role="img" aria-label={`Heat ${c.heat} out of 100`}>
+                        <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, c.heat))}%`, background: 'var(--accent)', borderRadius: 999 }} />
+                      </div>
+                      <span className="display tabular" style={{ fontSize: 19, fontWeight: 700 }}>{c.heat}</span>
+                      <span style={{ fontSize: 13.5, color: 'var(--ink-soft)' }}>heat</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }} role="img" aria-label={`Effort ${c.effortScore} out of 100`}>
+                        <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, c.effortScore))}%`, background: 'var(--green)', borderRadius: 999 }} />
+                      </div>
+                      <span className="display tabular" style={{ fontSize: 19, fontWeight: 700 }}>{c.effortScore}</span>
+                      <span style={{ fontSize: 13.5, color: 'var(--ink-soft)' }}>effort · {c.effort}</span>
+                    </div>
+                    <p style={{ fontSize: 14, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
+                      {c.heat >= 70 ? 'Running hot and crowded — the pool fills fastest on campaigns like this. ' : c.heat >= 40 ? 'Steady heat — real interest, but not capped. ' : 'Quiet — less competition for the pool. '}
+                      {EFFORT_NOTE[c.effort]}
+                    </p>
+                    <div style={{ height: 1, background: 'var(--cream-line)' }} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                      <span className="eyebrow" style={{ fontSize: 11 }}>What we&rsquo;re reading</span>
+                      {signals.map((sig) => (
+                        <div key={sig.k} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13.5 }}>
+                          <span style={{ color: 'var(--ink-faint)' }}>{sig.k}</span>
+                          <span className="tabular" style={{ color: 'var(--ink)', fontWeight: 600, textAlign: 'right' }}>{sig.v}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <span className="display tabular" style={{ fontSize: 19, fontWeight: 700 }}>{c.heat}</span>
-                  <span style={{ fontSize: 13.5, color: 'var(--ink-soft)' }}>heat</span>
                 </div>
-                <p style={{ fontSize: 14.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
-                  {c.heat >= 70
-                    ? 'Running hot, which also means crowded. The pool fills fastest on campaigns that look like this — get in early or skip it.'
-                    : c.heat >= 40
-                      ? 'Steady. Not a gold rush, but the pool is not close to capped either.'
-                      : 'Quiet. Less competition for the pool, which can be the whole reason to take it.'}
-                </p>
-                <div style={{ height: 1, background: 'var(--cream-line)' }} />
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span className="pill" style={{ background: 'var(--cream)', border: '1px solid var(--cream-line)', color: 'var(--ink)' }}>
-                    {c.effort} effort
-                  </span>
-                </div>
-                <p style={{ fontSize: 14.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>{EFFORT_NOTE[c.effort]}</p>
-              </div>
-            </div>
+              );
+            })()}
 
             <div className="card" style={{ padding: 22, background: 'var(--cream)' }}>
               <p style={{ fontSize: 13.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>

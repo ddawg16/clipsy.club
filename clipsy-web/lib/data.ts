@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Campaign, SortKey, WireEvent } from './types';
+import { deriveNiche } from './niche';
 
 /**
  * Reads run through the ANON key, which is safe to ship because Row Level
@@ -70,6 +71,7 @@ function toCampaign(r: Row): Campaign {
     budgetTotal: r.budget_total,
     budgetUsedPct: r.budget_used_pct,
     category: r.category,
+    niche: deriveNiche(r.name, r.category, r.source_id),
     teamPick: r.team_pick ?? false,
     teamNote: r.team_note,
     teamRank: r.team_rank,

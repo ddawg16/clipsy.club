@@ -17,6 +17,7 @@ export interface Campaign {
   budgetTotal: number | null;
   budgetUsedPct: number | null;
   category: string | null;
+  niche: string;
   teamPick: boolean;
   teamNote: string | null;
   teamRank: number | null;

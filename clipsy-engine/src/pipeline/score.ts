@@ -2,24 +2,36 @@ import { db, unwrap } from '../db.ts';
 import type { CampaignRow } from '../types.ts';
 
 /**
- * Heat and Effort are the only things on the site a competitor cannot scrape,
- * because they are computed from YOUR clippers' outcomes. Everything else on
- * the board is public data anyone could re-index.
+ * Heat and Effort — the two scores the whole board sorts on. Both are REAL,
+ * computed every run from each campaign's own stats, and expressed relative to
+ * the rest of the live board so the numbers actually mean something:
  *
- *   Heat   0..100  how hard this campaign is running right now (high = competitive)
+ *   Heat   0..100  how hard this campaign is running right now (high = crowded/hot)
  *   Effort 0..100  how likely you are to actually get approved and paid (high = easy)
  *
- * Both degrade gracefully: with no outcome data yet they fall back to public
- * signals, and get sharper every week your Discord reports back.
+ * There is no "default 50". A campaign missing a signal (e.g. no payout cycle
+ * published) simply has that component dropped and the remaining weights
+ * re-normalised — the score reflects only what we actually know about it, and
+ * two campaigns are only tied when their real inputs are tied.
+ *
+ * When clippers start reporting outcomes, those blend in and sharpen the score.
  */
 
+const DAY = 86_400_000;
 const clamp = (n: number, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, n));
 
-/** Where `value` sits in `all`, 0..1. Used so scores stay relative to the board. */
+/** Fraction of the board strictly below `value` (0..1). Ties share a rank. */
 function percentile(value: number, all: number[]): number {
   if (all.length === 0) return 0.5;
   const below = all.filter((v) => v < value).length;
   return below / all.length;
+}
+
+/** Weighted average of [value0..1, weight] parts, re-normalised over the parts present. */
+function blend(parts: Array<[number, number]>): number {
+  const w = parts.reduce((s, [, weight]) => s + weight, 0);
+  if (w === 0) return 0;
+  return parts.reduce((s, [v, weight]) => s + v * weight, 0) / w;
 }
 
 interface Outcome {
@@ -38,7 +50,7 @@ export async function scoreAll(): Promise<{ scored: number }> {
 
   if (campaigns.length === 0) return { scored: 0 };
 
-  const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
+  const since = new Date(Date.now() - 14 * DAY).toISOString();
   const outcomes = unwrap(
     await db()
       .from('clip_outcomes')
@@ -55,75 +67,69 @@ export async function scoreAll(): Promise<{ scored: number }> {
   }
 
   const now = Date.now();
-  const hot48 = now - 48 * 60 * 60 * 1000;
+  const hot48 = now - 2 * DAY;
 
+  // Board-relative reference arrays. null rate -> 0 (bottom); null min-views ->
+  // 0 which correctly reads as "no minimum = easiest".
   const allRates = campaigns.map((c) => c.rate_cpm ?? 0);
-  const allClipCounts = campaigns.map(
-    (c) => (byCampaign.get(c.id) ?? []).filter((o) => new Date(o.submitted_at).getTime() > hot48).length,
-  );
-  const allViews = campaigns.map((c) =>
-    (byCampaign.get(c.id) ?? [])
-      .filter((o) => new Date(o.submitted_at).getTime() > hot48)
-      .reduce((sum, o) => sum + (o.views ?? 0), 0),
-  );
-
+  const allMins = campaigns.map((c) => c.min_views ?? 0);
+  const recentClips = (id: string) => (byCampaign.get(id) ?? []).filter((o) => new Date(o.submitted_at).getTime() > hot48);
+  const allClipCounts = campaigns.map((c) => recentClips(c.id).length);
   const haveOutcomes = allClipCounts.some((n) => n > 0);
+
   const updates: Array<Pick<CampaignRow, 'id' | 'heat' | 'effort_score' | 'effort_label'>> = [];
 
   for (const c of campaigns) {
-    const mine = byCampaign.get(c.id) ?? [];
-    const recent = mine.filter((o) => new Date(o.submitted_at).getTime() > hot48);
-    const recentViews = recent.reduce((sum, o) => sum + (o.views ?? 0), 0);
+    const platformCount = Array.isArray(c.platforms) ? c.platforms.length : 0;
+    const reach = clamp((platformCount / 4) * 100) / 100; // 0..1, capped at 4 platforms
 
     // ---------------------------------------------------------------- heat
-    const freshnessDays = (now - new Date(c.first_seen_at).getTime()) / 86_400_000;
-    const freshness = clamp(100 - freshnessDays * 12); // brand new = hot, month old = cold
-
+    const ratePct = percentile(c.rate_cpm ?? 0, allRates); // hotter when the rate beats the board
+    const freshDays = (now - new Date(c.first_seen_at).getTime()) / DAY;
+    const fresh = clamp(100 - freshDays * 8) / 100; // brand new = hot, ~12 days = cold
     const hoursLeft = c.ends_at ? (new Date(c.ends_at).getTime() - now) / 3_600_000 : Infinity;
-    const urgency = hoursLeft === Infinity ? 30 : clamp(100 - hoursLeft / 3);
+    const urgency = hoursLeft === Infinity ? 0.3 : clamp(100 - hoursLeft / 3) / 100; // closing soon = hot
 
-    const ratePct = percentile(c.rate_cpm ?? 0, allRates) * 100;
+    const heatParts: Array<[number, number]> = [
+      [ratePct, 0.35],
+      [fresh, 0.25],
+      [urgency, 0.15],
+      [reach, 0.1],
+    ];
+    // A pool people are piling into is, by definition, hot/crowded.
+    if (c.budget_used_pct != null) heatParts.push([clamp(c.budget_used_pct) / 100, 0.15]);
+    // Once clippers report in, recent clip volume is the truest heat signal.
+    if (haveOutcomes) heatParts.push([percentile(recentClips(c.id).length, allClipCounts), 0.4]);
 
-    let heat: number;
-    if (haveOutcomes) {
-      heat =
-        percentile(recent.length, allClipCounts) * 35 +
-        percentile(recentViews, allViews) * 25 +
-        (ratePct / 100) * 15 +
-        (freshness / 100) * 15 +
-        (urgency / 100) * 10;
-    } else {
-      // No outcome data yet — lean on public signals until the Discord feeds us.
-      heat = (ratePct / 100) * 45 + (freshness / 100) * 35 + (urgency / 100) * 20;
-    }
+    const heat = Math.round(clamp(blend(heatParts) * 100));
 
     // -------------------------------------------------------------- effort
+    // Easier when the view minimum is low relative to the board.
+    const viewEase = 1 - percentile(c.min_views ?? 0, allMins);
+    const effortParts: Array<[number, number]> = [
+      [viewEase, 0.5],
+      [reach, 0.1],
+    ];
+    // More budget still on the table = more likely you actually get paid.
+    if (c.budget_used_pct != null) effortParts.push([1 - clamp(c.budget_used_pct) / 100, 0.25]);
+    // A known, fast payout cycle is easier than an unknown one.
+    if (c.payout_days != null) effortParts.push([clamp(100 - (c.payout_days / 45) * 100) / 100, 0.15]);
+
+    // Real approval rate, once we have enough of it, dominates effort.
+    const mine = byCampaign.get(c.id) ?? [];
     const decided = mine.filter((o) => o.approved !== null);
-    const approvalRate = decided.length >= 5 ? decided.filter((o) => o.approved).length / decided.length : null;
-
-    const paid = mine.filter((o) => o.paid_at);
-    const avgPayDays =
-      paid.length >= 3
-        ? paid.reduce((sum, o) => sum + (new Date(o.paid_at!).getTime() - new Date(o.submitted_at).getTime()), 0) /
-          paid.length /
-          86_400_000
-        : (c.payout_days ?? null);
-
-    const minViewsEase = c.min_views == null ? 100 : clamp(100 - (c.min_views / 25_000) * 100);
-    const payoutEase = avgPayDays == null ? 55 : clamp(100 - (avgPayDays / 45) * 100);
-
-    let effort: number;
-    if (approvalRate !== null) {
-      effort = approvalRate * 100 * 0.4 + payoutEase * 0.3 + minViewsEase * 0.3;
-    } else {
-      effort = payoutEase * 0.45 + minViewsEase * 0.55;
+    if (decided.length >= 5) {
+      const approvalRate = decided.filter((o) => o.approved).length / decided.length;
+      effortParts.push([approvalRate, 0.5]);
     }
+
+    const effort = Math.round(clamp(blend(effortParts) * 100));
 
     updates.push({
       id: c.id,
-      heat: Math.round(clamp(heat)),
-      effort_score: Math.round(clamp(effort)),
-      effort_label: effort >= 70 ? 'Low' : effort >= 45 ? 'Medium' : 'High',
+      heat,
+      effort_score: effort,
+      effort_label: effort >= 67 ? 'Low' : effort >= 40 ? 'Medium' : 'High',
     });
   }
 
