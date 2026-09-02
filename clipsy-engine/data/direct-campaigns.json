@@ -1,0 +1,4 @@
+{
+  "_note": "Campaigns Clipsy runs itself. Add an entry to feature a campaign on the board; the money side (submissions, view tracking, budget cap, payouts) runs on the URL's platform (e.g. Whop). Empty = nothing native is live.",
+  "campaigns": []
+}

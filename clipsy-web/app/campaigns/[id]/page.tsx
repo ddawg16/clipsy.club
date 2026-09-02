@@ -213,7 +213,7 @@ export default async function CampaignPage({ params }: Props) {
               </div>
               {href ? (
                 <a className="btn btn-primary" href={href} target="_blank" rel="noopener noreferrer nofollow" style={{ padding: '14px 22px', fontSize: 15.5 }}>
-                  Claim on {c.source}
+                  {c.source === 'Clipsy Direct' ? 'Submit your clips' : `Claim on ${c.source}`}
                 </a>
               ) : (
                 <span style={{ fontSize: 14, color: 'var(--ink-faint)' }}>No direct link published for this one.</span>
@@ -222,8 +222,9 @@ export default async function CampaignPage({ params }: Props) {
                 Ask about it first
               </a>
               <p style={{ fontSize: 12.5, color: 'var(--ink-faint)', margin: 0, lineHeight: 1.5 }}>
-                You&rsquo;re paid by {c.source} on their terms. We earn nothing from this clip — we just make sure you
-                knew it existed.
+                {c.source === 'Clipsy Direct'
+                  ? 'This is a Clipsy campaign. Submit through the link above — your views are tracked and you’re paid out there.'
+                  : `You’re paid by ${c.source} on their terms. We earn nothing from this clip — we just make sure you knew it existed.`}
               </p>
             </div>
           </div>

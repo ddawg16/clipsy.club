@@ -139,6 +139,11 @@ async function upsertCampaign(raw: RawCampaign, before: CampaignRow | null): Pro
     payout_method: raw.payoutMethod ?? null,
     category: raw.category ?? null,
     last_seen_at: new Date().toISOString(),
+    // Native "Clipsy Direct" campaigns ARE curated by us, so we let the file
+    // set their feature flags. Scraped sources still never touch team_* here.
+    ...(raw.sourceId === 'direct' && raw.teamPick !== undefined
+      ? { team_pick: raw.teamPick, team_note: raw.teamNote ?? null, team_rank: raw.teamRank ?? null }
+      : {}),
     // team_pick / team_note / team_rank are set by hand and deliberately
     // absent here — an upsert must never overwrite a human's curation.
     ...(before ? {} : { first_seen_at: new Date().toISOString() }),

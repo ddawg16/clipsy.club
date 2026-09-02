@@ -26,6 +26,10 @@ export interface RawCampaign {
   budgetUsedPct?: number | null;
   payoutMethod?: string | null;
   category?: string | null;
+  /** Native (source_id 'direct') campaigns only: hand-feature them. Ignored for scraped sources. */
+  teamPick?: boolean;
+  teamNote?: string | null;
+  teamRank?: number | null;
   /** Anything else worth keeping for later diffing. */
   raw?: Record<string, unknown>;
 }
