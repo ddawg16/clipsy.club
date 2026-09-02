@@ -122,6 +122,25 @@ export async function safeFetchJson(url: string, init: RequestInit = {}): Promis
   return JSON.parse(text);
 }
 
+/** Like safeFetchJson but returns raw text — for pages we parse as HTML/RSC. */
+export async function safeFetchText(url: string, init: RequestInit = {}): Promise<string> {
+  const target = safeUrl(url);
+  if (!target) throw new Error(`refusing to fetch non-http(s) url`);
+
+  const res = await fetch(target, {
+    ...init,
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    redirect: 'follow',
+  });
+
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+  const text = await res.text();
+  if (text.length > MAX_RESPONSE_BYTES) throw new Error(`response too large (${text.length} bytes)`);
+
+  return text;
+}
+
 /** Bound a timestamp to a sane window so bad data can't skew the scoring. */
 export function boundedDate(value: unknown, opts: { pastDays: number; futureDays: number }): string | null {
   if (value == null) return null;

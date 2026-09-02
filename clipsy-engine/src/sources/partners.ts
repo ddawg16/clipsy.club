@@ -96,6 +96,9 @@ export const partners: SourceAdapter = {
       const minViews = Number.isFinite(minRaw) && minRaw > 0 ? Math.round(minRaw) : null;
 
       const partner = cleanText(col(row, 'partner'));
+      // ClipMarket has its own live adapter (with auto budget) — never let a
+      // leftover sheet row double-list it under the same "via Clipmarket" badge.
+      if (partner && partner.toLowerCase().replace(/[^a-z]/g, '').includes('clipmarket')) continue;
 
       // Optional budget columns so a partner can show a "budget left" bar just
       // like the scraped networks. Give budget_total plus either budget_remaining

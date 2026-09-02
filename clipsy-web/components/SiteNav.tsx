@@ -78,6 +78,7 @@ export function SiteNav({ discord }: { discord: string }) {
 
         <nav
           ref={bar}
+          className="site-nav"
           style={{
             display: 'flex',
             alignItems: 'center',

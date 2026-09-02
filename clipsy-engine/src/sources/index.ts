@@ -1,5 +1,6 @@
 import type { SourceAdapter } from '../types.ts';
 import { clippingnet } from './clippingnet.ts';
+import { clipmarket } from './clipmarket.ts';
 import { clipster } from './clipster.ts';
 import { direct } from './direct.ts';
 import { partners } from './partners.ts';
@@ -11,7 +12,7 @@ import { whop } from './whop.ts';
  * Every adapter here reads a PUBLIC endpoint the site publishes itself — no
  * logins, no session cookies, no rendered-page scraping.
  */
-export const adapters: SourceAdapter[] = [clipster, clippingnet, whop, partners, direct];
+export const adapters: SourceAdapter[] = [clipster, clippingnet, clipmarket, whop, partners, direct];
 
 
 export function enabledAdapters(): SourceAdapter[] {
