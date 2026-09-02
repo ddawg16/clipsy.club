@@ -16,10 +16,12 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
   const rates = c.platformRates.filter((r) => r.rate !== null);
   const uniform = rates.length > 1 && rates.every((r) => r.rate === rates[0].rate);
   const initial = c.name.trim().charAt(0).toUpperCase() || '?';
+  // Native campaigns we've queued but not priced yet render as a teaser.
+  const opening = c.source === 'Clipsy Direct' && c.rateCpm == null;
 
   return (
     <a
-      href={`/campaigns/${c.id}`}
+      href={opening && c.briefUrl ? c.briefUrl : `/campaigns/${c.id}`}
       className="card"
       style={{
         padding: S.pad,
@@ -49,11 +51,17 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
         <div style={{ minWidth: 0, flex: 1 }}>
           <div className="display" style={{ fontSize: S.name, fontWeight: 700, lineHeight: 1.25, marginBottom: 4 }}>{c.name}</div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            <span className="pill pill-active" style={{ fontSize: compact ? 10.5 : 11.5, padding: compact ? '2px 7px' : '3px 9px' }}>
-              <span className="dot" />
-              Active
-            </span>
-            <span style={{ fontSize: S.sub, color: 'var(--ink-faint)' }}>{timeLeft(c.endsAt)}</span>
+            {opening ? (
+              <span className="pill" style={{ fontSize: compact ? 10.5 : 11.5, padding: compact ? '2px 7px' : '3px 9px', background: 'var(--accent)', color: 'var(--accent-ink)' }}>
+                Opening soon
+              </span>
+            ) : (
+              <span className="pill pill-active" style={{ fontSize: compact ? 10.5 : 11.5, padding: compact ? '2px 7px' : '3px 9px' }}>
+                <span className="dot" />
+                Active
+              </span>
+            )}
+            <span style={{ fontSize: S.sub, color: 'var(--ink-faint)' }}>{opening ? 'Drops soon' : timeLeft(c.endsAt)}</span>
           </div>
         </div>
       </div>
@@ -91,7 +99,11 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
 
       <div style={{ marginTop: 'auto', paddingTop: 2, display: 'flex', flexDirection: 'column', gap: compact ? 8 : 10 }}>
         <span style={{ fontSize: S.meta, color: 'var(--ink-soft)' }}>
-          {c.minViews == null ? 'No view minimum' : `Min ${new Intl.NumberFormat('en-US', { notation: 'compact' }).format(c.minViews)} views to qualify`}
+          {opening
+            ? 'Rate, pool & minimum announced at the drop'
+            : c.minViews == null
+              ? 'No view minimum'
+              : `Min ${new Intl.NumberFormat('en-US', { notation: 'compact' }).format(c.minViews)} views to qualify`}
         </span>
 
         {(c.budgetTotal != null || c.budgetUsedPct !== null) && (() => {
