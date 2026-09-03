@@ -216,7 +216,7 @@ export default async function CampaignPage({ params }: Props) {
                   {c.source === 'Clipsy Direct' ? 'Submit your clips' : `Claim on ${c.source}`}
                 </a>
               ) : (
-                <span style={{ fontSize: 14, color: 'var(--ink-faint)' }}>No direct link published for this one.</span>
+                <span style={{ fontSize: 14, color: 'var(--ink-faint)' }}>{c.source === 'Clipsy Direct' ? 'Submissions open at the drop — join the Discord below to be first.' : 'No direct link published for this one.'}</span>
               )}
               <a className="btn btn-ghost" href={discord} target="_blank" rel="noopener noreferrer" style={{ fontSize: 14.5 }}>
                 Ask about it first

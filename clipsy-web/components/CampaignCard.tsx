@@ -21,7 +21,7 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
 
   return (
     <a
-      href={opening && c.briefUrl ? c.briefUrl : `/campaigns/${c.id}`}
+      href={`/campaigns/${c.id}`}
       className="card"
       style={{
         padding: S.pad,

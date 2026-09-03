@@ -5,7 +5,7 @@
       "externalId": "sgnl-test",
       "name": "SGNL [Test]",
       "url": null,
-      "briefUrl": "https://clipsy.club/sgnl",
+      "briefUrl": null,
       "rateCpm": null,
       "minViews": null,
       "platforms": [
@@ -25,5 +25,5 @@
       "teamRank": 1
     }
   ],
-  "_fill_at_drop": "SGNL commercials: set rateCpm ($/100k), budgetTotal (pool $), minViews (MVR), endsAt (ISO deadline), and url (Whop submit link). Until then it shows as 'Opening soon' at #1."
+  "_fill_at_drop": "SGNL: set rateCpm ($/100k), budgetTotal (pool $), minViews (MVR), endsAt (ISO or null), url (Whop submit link), briefUrl (Google Doc). Until priced it shows 'Opening soon' at #1 and links to its normal campaign page."
 }
