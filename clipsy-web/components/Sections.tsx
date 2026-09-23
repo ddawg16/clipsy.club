@@ -647,8 +647,8 @@ export function Footer({ discord }: { discord: string }) {
 
       <div className="wrap" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid var(--cream-line)' }}>
         <span style={{ fontSize: 12.5, color: 'var(--ink-faint)' }}>
-          © Clipsy Club. Independent — not affiliated with the networks we index. Every campaign links back to its
-          source.
+          © Clipsy Club. Solely owned and operated by Darsh Shah. Independent — not affiliated with the networks we
+          index. Every campaign links back to its source.
         </span>
       </div>
     </footer>
