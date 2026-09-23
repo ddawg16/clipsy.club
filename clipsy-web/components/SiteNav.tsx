@@ -161,7 +161,10 @@ export function SiteNav({ discord }: { discord: string }) {
           <a href="/contact">Contact</a>
         </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <a className="btn btn-ghost" href="/dashboard" style={{ padding: '9px 13px', minHeight: 42 }}>
+            Dashboard
+          </a>
           <a
             className="btn btn-primary"
             href={discord}

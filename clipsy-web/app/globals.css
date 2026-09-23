@@ -158,6 +158,20 @@ button:focus-visible {
   line-height: 1.6;
 }
 
+.legal-document {
+  max-width: 820px;
+  padding-top: 56px;
+  padding-bottom: 72px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.legal-document h2 { color: var(--ink); font-size: 23px; margin: 34px 0 10px; }
+.legal-document h2:first-child { margin-top: 0; }
+.legal-document p, .legal-document ol { margin: 0 0 16px; }
+.legal-document li { margin-bottom: 8px; }
+.legal-document a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -257,4 +271,102 @@ button:focus-visible {
 }
 @media (max-width: 400px) {
   nav.site-nav { gap: 10px !important; }
+}
+
+/* ----------------------------------------------------- visual guide system */
+.guide-thumb { height: 114px; position: relative; overflow: hidden; padding: 16px; }
+.guide-thumb-window {
+  position: absolute; left: 18px; top: 18px; width: 58%; height: 72px; border-radius: 9px;
+  background: rgba(255, 255, 255, 0.9); box-shadow: 0 12px 28px rgba(42, 18, 4, 0.16);
+  padding: 16px 12px 10px; display: flex; flex-direction: column; gap: 7px;
+}
+.guide-thumb-dot {
+  position: absolute; top: 7px; left: 9px; width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; opacity: 0.3; box-shadow: 9px 0 currentColor, 18px 0 currentColor;
+}
+.guide-thumb-line { height: 6px; width: 56%; border-radius: 5px; background: currentColor; opacity: 0.25; }
+.guide-thumb-line-long { width: 86%; opacity: 0.7; }
+.guide-thumb-line-short { width: 38%; }
+.guide-thumb-phone {
+  position: absolute; right: 22px; top: 10px; width: 54px; height: 92px; border: 4px solid #2a1204;
+  border-radius: 13px; background: #f8d7a9; box-shadow: 0 12px 24px rgba(42, 18, 4, 0.2);
+  display: grid; place-items: center;
+}
+.guide-thumb-play { font-size: 13px; color: #2a1204; }
+.guide-thumb-caption { position: absolute; left: 9px; right: 9px; bottom: 18px; height: 5px; border-radius: 4px; background: #fff; box-shadow: 0 8px #fff; }
+.guide-thumb-label { position: absolute; right: 86px; bottom: 9px; color: rgba(255,255,255,0.9); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+.guide-masthead {
+  padding-top: 46px; padding-bottom: 46px; display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(360px, 1.1fr); gap: 42px; align-items: center;
+}
+.guide-masthead-copy { display: flex; flex-direction: column; gap: 16px; }
+.guide-hero-visual { margin: 0; position: relative; border-radius: 18px; overflow: hidden; min-height: 318px; background: #dca15f; }
+.guide-hero-visual img { display: block; width: 100%; height: 318px; object-fit: cover; }
+.guide-hero-visual figcaption {
+  position: absolute; left: 14px; right: 14px; bottom: 14px; background: rgba(30, 24, 16, 0.88);
+  color: #fffaf0; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;
+  backdrop-filter: blur(8px);
+}
+.guide-hero-visual figcaption span { color: #f3b88a; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.guide-hero-visual figcaption strong { font-family: var(--font-display), sans-serif; font-size: 15px; }
+.guide-article-column { max-width: 780px; display: flex; flex-direction: column; gap: 44px; }
+
+.guide-quick-path { background: var(--ink); color: var(--cream-card); border-radius: 18px; padding: 25px; }
+.guide-quick-path .eyebrow { color: #f3b88a; }
+.guide-quick-path-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.guide-quick-path-head h2 { font-size: 22px; }
+.guide-quick-path ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.guide-quick-path li { display: flex; flex-direction: column; gap: 10px; color: #eee2c8; font-size: 14px; line-height: 1.45; }
+.guide-step-number { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 800; }
+
+.guide-walkthrough { margin-top: 12px; display: flex; flex-direction: column; gap: 18px; }
+.guide-walkthrough-head { display: flex; flex-direction: column; gap: 7px; }
+.guide-walkthrough-head h2 { font-size: 24px; }
+.guide-walkthrough-head p { margin: 0; color: var(--ink-faint); font-size: 14px; line-height: 1.5; }
+.guide-screen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+.guide-screen-card { margin: 0; min-width: 0; overflow: hidden; background: var(--cream-card); border: 1px solid var(--cream-line); border-radius: 14px; }
+.guide-screen-bar { height: 30px; background: var(--ink); color: #f6ead1; display: flex; align-items: center; gap: 5px; padding: 0 9px; font-size: 10px; }
+.guide-screen-bar i { width: 5px; height: 5px; border-radius: 50%; background: #dca15f; opacity: .8; }
+.guide-screen-bar span { margin-left: 4px; opacity: .72; }
+.guide-screen-body { height: 206px; padding: 16px; }
+.screen-kicker { color: var(--accent); text-transform: uppercase; letter-spacing: .07em; font-size: 10px; font-weight: 800; }
+.guide-screen-body > strong { display: block; margin: 7px 0 14px; font-family: var(--font-display), sans-serif; font-size: 14px; line-height: 1.25; }
+.screen-check { display: flex; align-items: center; gap: 7px; padding: 7px 0; border-top: 1px solid var(--cream-line); color: var(--ink-soft); font-size: 11px; }
+.screen-check b { color: var(--green); }
+.edit-screen { display: grid; grid-template-columns: 74px 1fr; gap: 12px; background: #352f28; }
+.phone-preview { position: relative; border: 3px solid #181510; border-radius: 12px; overflow: hidden; background: linear-gradient(165deg,#dc9a55,#663f30); }
+.preview-face { position: absolute; width: 38px; height: 38px; border-radius: 50%; background: #efc393; left: 15px; top: 64px; box-shadow: 0 30px 0 12px #325142; }
+.safe-zone { position: absolute; left: 5px; right: 5px; padding: 3px; border: 1px dashed rgba(255,255,255,.72); color: #fff; text-align: center; font-size: 7px; text-transform: uppercase; }
+.safe-zone-top { top: 8px; }
+.safe-zone-bottom { bottom: 8px; }
+.caption-line { position: absolute; left: 12px; height: 4px; border-radius: 4px; background: white; }
+.caption-line-one { width: 48px; top: 114px; }
+.caption-line-two { width: 34px; top: 121px; }
+.edit-timeline { position: relative; padding-top: 34px; }
+.timeline-track { display: block; height: 22px; border-radius: 4px; margin-bottom: 7px; }
+.timeline-video { background: #d98746; }
+.timeline-captions { background: #e9d9a4; width: 76%; }
+.timeline-audio { background: #6d9c7e; }
+.timeline-playhead { position: absolute; left: 38%; top: 25px; bottom: 28px; width: 2px; background: #fff; z-index: 2; }
+.tracker-row { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-top: 1px solid var(--cream-line); color: var(--ink-soft); font-size: 11px; }
+.tracker-row b { color: var(--ink); }
+.tracker-progress { height: 7px; margin-top: 11px; background: var(--cream-line); border-radius: 8px; overflow: hidden; }
+.tracker-progress span { display: block; width: 68%; height: 100%; background: var(--green); }
+.guide-screen-card figcaption { padding: 12px; display: grid; grid-template-columns: 24px 1fr; gap: 2px 8px; border-top: 1px solid var(--cream-line); }
+.guide-screen-card figcaption > span { grid-row: 1 / 3; display: grid; place-items: center; align-self: start; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 11px; }
+.guide-screen-card figcaption strong { font-size: 12px; }
+.guide-screen-card figcaption small { color: var(--ink-faint); font-size: 10px; line-height: 1.35; }
+
+@media (max-width: 880px) {
+  .guide-masthead { grid-template-columns: 1fr; }
+  .guide-hero-visual, .guide-hero-visual img { min-height: 0; height: auto; }
+  .guide-screen-grid { grid-template-columns: 1fr; }
+  .guide-screen-body { height: 220px; }
+}
+@media (max-width: 560px) {
+  .guide-masthead { gap: 28px; padding-top: 32px; padding-bottom: 32px; }
+  .guide-quick-path ol { grid-template-columns: 1fr; }
+  .guide-quick-path li { flex-direction: row; align-items: center; }
+  .guide-step-number { flex: 0 0 30px; }
 }

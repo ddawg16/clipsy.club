@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { GuideThumbnail } from '@/components/GuideVisuals';
 import { Footer, Nav } from '@/components/Sections';
 import { CATEGORIES, GUIDES, guidesIn } from '@/lib/guides';
 import { safeExternal } from '@/lib/safe';
@@ -79,18 +80,13 @@ export default function LearnPage() {
                       className="card"
                       style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
                     >
-                      <div
-                        style={{
-                          height: 108,
-                          background: TINT[g.category],
-                          display: 'flex',
-                          alignItems: 'flex-end',
-                          padding: 16,
-                        }}
-                      >
+                      <div style={{ background: TINT[g.category] }}>
+                        <GuideThumbnail category={g.category} />
                         <span
                           className="display"
                           style={{
+                            display: 'block',
+                            padding: '0 16px 14px',
                             fontSize: 12,
                             fontWeight: 700,
                             letterSpacing: '0.09em',

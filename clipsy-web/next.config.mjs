@@ -33,7 +33,7 @@ const nextConfig = {
               "connect-src 'self' https://*.supabase.co",
               "frame-ancestors 'none'",
               "base-uri 'self'",
-              "form-action 'self'",
+              "form-action 'self' https://api.clipsy.club",
             ].join('; '),
           },
         ],

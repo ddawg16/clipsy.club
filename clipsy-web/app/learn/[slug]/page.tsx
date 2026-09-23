@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { GuideHeroVisual, GuideQuickPath, GuideScreenshotWalkthrough } from '@/components/GuideVisuals';
 import { Footer, Nav } from '@/components/Sections';
 import { CATEGORIES, GUIDES, guideBySlug, guidesIn } from '@/lib/guides';
 import { safeExternal } from '@/lib/safe';
@@ -36,26 +37,30 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
       <main>
         {/* masthead */}
         <div style={{ borderBottom: '1px solid var(--cream-line)', background: 'var(--cream-card)' }}>
-          <div className="wrap" style={{ padding: '48px 32px 40px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <a href="/learn" style={{ fontSize: 13.5, color: 'var(--ink-faint)' }}>
-              &larr; Learn &amp; Earn
-            </a>
-            <span className="eyebrow">
-              {category?.title} &middot; {guide.minutes} minute read
-            </span>
-            <h1 style={{ fontSize: 'clamp(30px, 4.6vw, 44px)', fontWeight: 700, lineHeight: 1.08, maxWidth: 760 }}>
-              {guide.title}
-            </h1>
-            <p style={{ fontSize: 17.5, color: 'var(--ink-soft)', margin: 0, maxWidth: 640, lineHeight: 1.55 }}>
-              {guide.dek}
-            </p>
+          <div className="wrap guide-masthead">
+            <div className="guide-masthead-copy">
+              <a href="/learn" style={{ fontSize: 13.5, color: 'var(--ink-faint)' }}>
+                &larr; Learn &amp; Earn
+              </a>
+              <span className="eyebrow">
+                {category?.title} &middot; {guide.minutes} minute read
+              </span>
+              <h1 style={{ fontSize: 'clamp(30px, 4.6vw, 44px)', fontWeight: 700, lineHeight: 1.08 }}>
+                {guide.title}
+              </h1>
+              <p style={{ fontSize: 17.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
+                {guide.dek}
+              </p>
+            </div>
+            <GuideHeroVisual guide={guide} />
           </div>
         </div>
 
         {/* body */}
         <article className="wrap" style={{ paddingTop: 48, paddingBottom: 56 }}>
-          <div style={{ maxWidth: 680, display: 'flex', flexDirection: 'column', gap: 40 }}>
-            {guide.sections.map((s) => (
+          <div className="guide-article-column">
+            <GuideQuickPath guide={guide} />
+            {guide.sections.map((s, sectionIndex) => (
               <section key={s.h} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <h2 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.2 }}>{s.h}</h2>
                 {s.body.map((p, i) => (
@@ -75,6 +80,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                     ))}
                   </ul>
                 )}
+                {sectionIndex === 1 && <GuideScreenshotWalkthrough guide={guide} />}
               </section>
             ))}
 

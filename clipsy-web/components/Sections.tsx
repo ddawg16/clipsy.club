@@ -632,6 +632,15 @@ export function Footer({ discord }: { discord: string }) {
             <a href={discord} target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>
               Discord
             </a>
+            <a href="/dashboard" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Dashboard</a>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <span className="eyebrow" style={{ fontSize: 11.5 }}>
+              Legal
+            </span>
+            <a href="/privacy" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Privacy</a>
+            <a href="/terms" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Terms</a>
+            <a href="/data-deletion" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Data deletion</a>
           </div>
         </div>
       </div>
