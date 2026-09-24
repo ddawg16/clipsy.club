@@ -78,7 +78,7 @@ export default async function CampaignPage({ params }: Props) {
           </div>
         </div>
 
-        <div className="wrap section" style={{ display: 'flex', gap: 48, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <div className="wrap section" style={{ display: 'flex', gap: 48, alignItems: 'flex-start', flexWrap: 'wrap', paddingInline: 'clamp(18px, 2.5vw, 32px)' }}>
           <div style={{ flex: '1 1 420px', display: 'flex', flexDirection: 'column', gap: 28, minWidth: 0 }}>
             <div>
               <span className="eyebrow" style={{ display: 'block', marginBottom: 14 }}>The numbers</span>
