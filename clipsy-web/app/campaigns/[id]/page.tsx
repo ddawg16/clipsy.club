@@ -37,7 +37,7 @@ export default async function CampaignPage({ params }: Props) {
 
   const facts: Array<[string, string]> = [
     [`Bounty rate per ${c.ratePer1k != null ? '1,000' : '100,000'} views`, rate(c.ratePer1k ?? c.rateCpm)],
-    ['Qualifier', views(c.minViews)],
+    ['Qualifier', c.source === 'Clipsy Direct' ? 'See campaign requirements in the dashboard' : views(c.minViews)],
     ['Payout', payout(c.payoutDays)],
     ['Closes', timeLeft(c.endsAt)],
     ['Network', c.source],
@@ -146,7 +146,7 @@ export default async function CampaignPage({ params }: Props) {
 
             <div className="card" style={{ padding: 22, background: 'var(--cream)' }}>
               <p style={{ fontSize: 13.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
-                <strong>Read the brief first.</strong> Follow the campaign rules above before submitting. Ask in Discord if anything is unclear.
+                <strong>Read the brief first.</strong> {c.rules ? 'Follow the campaign rules above before submitting.' : 'Check the campaign instructions in the dashboard before submitting.'} Ask in Discord if anything is unclear.
               </p>
               {brief && (
                 <a className="btn btn-ghost" href={brief} target="_blank" rel="noopener noreferrer nofollow" style={{ marginTop: 14, fontSize: 14 }}>

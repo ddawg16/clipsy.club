@@ -603,7 +603,7 @@ export function Footer({ discord }: { discord: string }) {
             </span>
           </div>
           <p style={{ fontSize: 13, color: 'var(--ink-faint)', lineHeight: 1.5, margin: 0 }}>
-            Every clipping network, one board. Built and moderated by clippers.
+            Active Clipsy campaigns, managed through Discord.
           </p>
         </div>
 
@@ -653,7 +653,7 @@ export function Footer({ discord }: { discord: string }) {
 
       <div className="wrap" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid var(--cream-line)' }}>
         <span style={{ fontSize: 12.5, color: 'var(--ink-faint)' }}>
-          © Clipsy Club · An Apex Media company, solely owned and operated by Darsh Shah. Independent of the networks we index. Every campaign links back to its source.
+          © Clipsy Club · An Apex Media company, solely owned and operated by Darsh Shah. Campaigns shown here are managed by Clipsy.
         </span>
       </div>
     </footer>

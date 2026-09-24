@@ -108,7 +108,9 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
         <span style={{ fontSize: S.meta, color: 'var(--ink-soft)' }}>
           {opening
             ? 'Rate, pool & minimum announced at the drop'
-            : c.minViews == null
+            : c.source === 'Clipsy Direct'
+              ? 'See campaign requirements in the dashboard'
+              : c.minViews == null
               ? 'No view minimum'
               : `Min ${new Intl.NumberFormat('en-US', { notation: 'compact' }).format(c.minViews)} views to qualify`}
         </span>
