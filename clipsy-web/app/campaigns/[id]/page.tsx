@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!c) return { title: 'Campaign not found — Clipsy' };
   return {
     title: `${c.name} — Clipsy`,
-    description: `${rate(c.rateCpm)} per 100k views on ${c.source}. ${views(c.minViews)}.`,
+    description: c.description || `${rate(c.ratePer1k ?? c.rateCpm)} per ${c.ratePer1k != null ? '1,000' : '100,000'} views on ${c.source}.`,
   };
 }
 
@@ -36,14 +36,14 @@ export default async function CampaignPage({ params }: Props) {
   const href = safeHref(c.url);
 
   const facts: Array<[string, string]> = [
-    ['Bounty rate per 100k', rate(c.rateCpm)],
+    [`Bounty rate per ${c.ratePer1k != null ? '1,000' : '100,000'} views`, rate(c.ratePer1k ?? c.rateCpm)],
     ['Qualifier', views(c.minViews)],
     ['Payout', payout(c.payoutDays)],
     ['Closes', timeLeft(c.endsAt)],
     ['Network', c.source],
     ['Category', c.category ? c.category.replace(/_/g, ' ') : 'Not stated'],
   ];
-  const rates = c.platformRates.filter((r) => r.rate !== null);
+  const rates = c.ratePer1k != null ? [] : c.platformRates.filter((r) => r.rate !== null);
   const brief = safeHref(c.briefUrl);
 
   return (
@@ -137,65 +137,16 @@ export default async function CampaignPage({ params }: Props) {
               );
             })()}
 
-            {(() => {
-              const usedPct = c.budgetUsedPct;
-              const remaining =
-                c.budgetTotal != null && usedPct != null
-                  ? c.budgetTotal * (1 - Math.max(0, Math.min(100, usedPct)) / 100)
-                  : null;
-              const compact = (n: number) => new Intl.NumberFormat('en-US', { notation: 'compact' }).format(n);
-              const plat = (p: string) => (p.toLowerCase() === 'x' ? 'X' : p.charAt(0).toUpperCase() + p.slice(1));
-              // Every line here is a REAL stat pulled from this campaign — these are
-              // exactly what the Heat and Effort scores above are computed from.
-              const signals: Array<{ k: string; v: string }> = [
-                { k: 'Niche', v: c.niche },
-                { k: 'View minimum', v: c.minViews == null ? 'None — anyone qualifies' : `${compact(c.minViews)} views` },
-                { k: 'Rate', v: c.rateCpm != null ? `${rate(c.rateCpm)} / 100k` : 'Bounty / pot based' },
-                { k: 'Budget', v: usedPct != null ? `${usedPct}% claimed${remaining != null ? `, ${dollars(remaining)} left` : ''}` : `Not published by ${c.source}` },
-                { k: 'Platforms', v: c.platforms.length ? c.platforms.map(plat).join(', ') : '—' },
-                { k: 'Payout', v: c.payoutDays != null ? `${c.payoutDays} days` : 'Not published' },
-              ];
-              return (
-                <div>
-                  <span className="eyebrow" style={{ display: 'block', marginBottom: 14 }}>Our read</span>
-                  <div className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                      <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }} role="img" aria-label={`Heat ${c.heat} out of 100`}>
-                        <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, c.heat))}%`, background: 'var(--accent)', borderRadius: 999 }} />
-                      </div>
-                      <span className="display tabular" style={{ fontSize: 19, fontWeight: 700 }}>{c.heat}</span>
-                      <span style={{ fontSize: 13.5, color: 'var(--ink-soft)' }}>heat</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                      <div style={{ flex: 1, height: 8, borderRadius: 999, background: 'var(--cream-line)', overflow: 'hidden' }} role="img" aria-label={`Effort ${c.effortScore} out of 100`}>
-                        <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, c.effortScore))}%`, background: 'var(--green)', borderRadius: 999 }} />
-                      </div>
-                      <span className="display tabular" style={{ fontSize: 19, fontWeight: 700 }}>{c.effortScore}</span>
-                      <span style={{ fontSize: 13.5, color: 'var(--ink-soft)' }}>effort · {c.effort}</span>
-                    </div>
-                    <p style={{ fontSize: 14, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
-                      {c.heat >= 70 ? 'Running hot and crowded — the pool fills fastest on campaigns like this. ' : c.heat >= 40 ? 'Steady heat — real interest, but not capped. ' : 'Quiet — less competition for the pool. '}
-                      {EFFORT_NOTE[c.effort]}
-                    </p>
-                    <div style={{ height: 1, background: 'var(--cream-line)' }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-                      <span className="eyebrow" style={{ fontSize: 11 }}>What we&rsquo;re reading</span>
-                      {signals.map((sig) => (
-                        <div key={sig.k} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13.5 }}>
-                          <span style={{ color: 'var(--ink-faint)' }}>{sig.k}</span>
-                          <span className="tabular" style={{ color: 'var(--ink)', fontWeight: 600, textAlign: 'right' }}>{sig.v}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            })()}
+            {(c.description || c.rules) && (
+              <div className="card" style={{ padding: 24 }}>
+                {c.description && <><span className="eyebrow">Campaign description</span><p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{c.description}</p></>}
+                {c.rules && <><span className="eyebrow">Campaign rules</span><p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{c.rules}</p></>}
+              </div>
+            )}
 
             <div className="card" style={{ padding: 22, background: 'var(--cream)' }}>
               <p style={{ fontSize: 13.5, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.55 }}>
-                <strong>Read the brief first.</strong> The banned-footage list and the exact approval rules live on{' '}
-                {c.source}, not here. Most rejections are brief violations, not bad edits.
+                <strong>Read the brief first.</strong> Follow the campaign rules above before submitting. Ask in Discord if anything is unclear.
               </p>
               {brief && (
                 <a className="btn btn-ghost" href={brief} target="_blank" rel="noopener noreferrer nofollow" style={{ marginTop: 14, fontSize: 14 }}>
@@ -208,8 +159,8 @@ export default async function CampaignPage({ params }: Props) {
           <div style={{ flex: '0 1 320px', display: 'flex', flexDirection: 'column', gap: 14, position: 'sticky', top: 100 }}>
             <div className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div>
-                <span className="display tabular" style={{ fontSize: 38, fontWeight: 700 }}>{rate(c.rateCpm)}</span>
-                <span style={{ fontSize: 14, color: 'var(--ink-soft)' }}> / 100k views</span>
+                <span className="display tabular" style={{ fontSize: 38, fontWeight: 700 }}>{rate(c.ratePer1k ?? c.rateCpm)}</span>
+                <span style={{ fontSize: 14, color: 'var(--ink-soft)' }}> / {c.ratePer1k != null ? '1,000' : '100,000'} views</span>
               </div>
               {href ? (
                 <a className="btn btn-primary" href={href} target="_blank" rel="noopener noreferrer nofollow" style={{ padding: '14px 22px', fontSize: 15.5 }}>
@@ -223,7 +174,7 @@ export default async function CampaignPage({ params }: Props) {
               </a>
               <p style={{ fontSize: 12.5, color: 'var(--ink-faint)', margin: 0, lineHeight: 1.5 }}>
                 {c.source === 'Clipsy Direct'
-                  ? 'This is a Clipsy campaign. Submit through the link above — your views are tracked and you’re paid out there.'
+                  ? 'This campaign is managed through the Clipsy Discord bot. Join Discord to submit and track clips.'
                   : `You’re paid by ${c.source} on their terms. We earn nothing from this clip — we just make sure you knew it existed.`}
               </p>
             </div>

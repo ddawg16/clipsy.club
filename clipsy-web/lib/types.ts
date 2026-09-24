@@ -4,6 +4,9 @@ export interface Campaign {
   source: string;
   url: string | null;
   rateCpm: number | null;
+  ratePer1k?: number | null;
+  description?: string;
+  rules?: string | null;
   minViews: number | null;
   platforms: string[];
   endsAt: string | null;

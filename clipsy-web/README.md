@@ -2,25 +2,19 @@
 
 The clipsy.club frontend. Next.js App Router, deploys to Vercel.
 
-Public campaign discovery remains read-only through Supabase/RLS. Authenticated submissions, earnings, payouts, linked accounts, and account deletion live in the Clip Campaign Manager at `NEXT_PUBLIC_CLIPSY_DASHBOARD_URL`. For server-to-server calls, use `CLIPSY_API_BASE_URL` and a least-privilege `CLIPSY_API_KEY`; never prefix that key with `NEXT_PUBLIC_` or call the manager API directly from browser code. See `docs/ADR-001-clipsy-integration.md` and `docs/DEPLOY_CHECKLIST.md`.
+The public campaign board reads active campaigns from the Discord manager's limited read-only feed at `/api/v1/public/campaigns`. Draft, paused, ended, and out-of-window campaigns are omitted. The older Supabase campaign catalog is no longer shown; Supabase still supplies Wire events. New campaigns appear once activated in the manager, without a separate website entry. The manager is the source for campaign names, rates per 1,000 views, platforms, and availability. Detailed financial and review data stay in the authenticated manager dashboard.
 
-Reads campaigns and Wire events straight from Supabase in server components
-using the **anon key**, which is safe to ship because Row Level Security decides
-what it can see (`clipsy-engine/sql/002_security.sql`). The service-role key
-must never appear in this app.
+The feed defaults to the current Render backend URL. Set `CLIPSY_API_BASE_URL` to move it to another HTTPS origin. `CLIPSY_API_KEY` is needed only for future authenticated server-to-server calls, never for the public board.
 
 ## Run it
 
 ```bash
 npm install
-cp .env.local.example .env.local     # fill in Supabase URL + ANON key
+cp .env.local.example .env.local     # optional Wire and Discord settings
 npm run dev                          # http://localhost:3000
 ```
 
-The page renders correctly with an empty database — every section has an honest
-empty state rather than placeholder campaigns. That is deliberate: you can put
-this on a staging URL before the first ingest run and it will not look broken or
-lie about having data.
+The board shows an honest empty state if no campaign is active or the backend is unavailable. It never falls back to the retired scraped catalog.
 
 ## Security notes
 
@@ -44,6 +38,6 @@ with real Clipsy numbers once there are any.
 
 ## Deploy
 
-Vercel → import the repo → set the variables from `.env.local.example`, keeping
-`CLIPSY_API_KEY` server-only. Deploy to a preview URL first and complete
+Vercel → import the repo → set the desired variables from `.env.local.example`.
+Keep any future `CLIPSY_API_KEY` server-only. Deploy to a preview URL first and complete
 `docs/DEPLOY_CHECKLIST.md` before pointing the domain.

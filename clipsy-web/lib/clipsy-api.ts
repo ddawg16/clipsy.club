@@ -9,8 +9,7 @@ import 'server-only';
 const REQUEST_TIMEOUT_MS = 10_000;
 
 function baseUrl() {
-  const configured = process.env.CLIPSY_API_BASE_URL;
-  if (!configured) throw new Error('CLIPSY_API_BASE_URL is not configured.');
+  const configured = process.env.CLIPSY_API_BASE_URL ?? 'https://clipsy-club-bot-backend-access.onrender.com';
   const url = new URL(configured);
   const local = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
   if (url.protocol !== 'https:' && !(process.env.NODE_ENV !== 'production' && local)) {

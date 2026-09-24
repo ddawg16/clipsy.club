@@ -6,52 +6,14 @@ import { NICHE_ORDER } from '@/lib/niche';
 import { CampaignCard } from './CampaignCard';
 
 const TABS: Array<{ id: SortKey; label: string; note: string }> = [
-  {
-    id: 'picks',
-    label: 'Top team picks',
-    note: 'Your hand-picked campaigns first, in the order you set them — then everything else by heat. This is the default view.',
-  },
-  {
-    id: 'hot',
-    label: 'Hottest',
-    note: 'Heat = how hard a campaign is running right now: how its rate compares to the rest of the board (35%), how recently it launched (25%), how soon it closes (15%), how many platforms it runs on (10%), and — where we know it — how much of the budget is already claimed (15%). High heat means crowded and competitive, not easy.',
-  },
-  {
-    id: 'easy',
-    label: 'Easiest to get paid',
-    note: 'Effort = how likely you are to actually get approved and paid: mostly how low the view minimum is versus the board (50%), plus how much budget is still unclaimed (25%), how fast the payout cycle is (15%), and platform reach (10%). Start here if you have never been paid for a clip.',
-  },
-  {
-    id: 'rate',
-    label: 'Best rate',
-    note: 'Straight CPM — the highest dollar-per-100k-views first, with ties broken by which is easier to get paid. Worth saying: the top rate is rarely the easiest money, and usually carries the highest view minimum.',
-  },
+  { id: 'hot', label: 'Campaigns', note: 'Active campaigns from the Clipsy Discord manager.' },
+  { id: 'rate', label: 'Best rate', note: 'Highest payout per 1,000 views first.' },
 ];
-
-// Deterministic tie-breaker so the order is never arbitrary: heat, then rate,
-// then effort, then name. Two cards only tie when every real input ties.
-const tie = (a: Campaign, b: Campaign): number =>
-  b.heat - a.heat ||
-  (b.rateCpm ?? -1) - (a.rateCpm ?? -1) ||
-  b.effortScore - a.effortScore ||
-  a.name.localeCompare(b.name);
 
 function sortCampaigns(list: Campaign[], key: SortKey): Campaign[] {
   const copy = [...list];
-  switch (key) {
-    case 'easy':
-      return copy.sort((a, b) => b.effortScore - a.effortScore || tie(a, b));
-    case 'rate':
-      return copy.sort((a, b) => (b.rateCpm ?? -1) - (a.rateCpm ?? -1) || b.effortScore - a.effortScore || tie(a, b));
-    case 'picks':
-      return copy.sort((a, b) => {
-        if (a.teamPick !== b.teamPick) return a.teamPick ? -1 : 1;
-        if (a.teamPick && b.teamPick) return (a.teamRank ?? 99) - (b.teamRank ?? 99);
-        return b.heat - a.heat || tie(a, b);
-      });
-    default: // 'hot'
-      return copy.sort((a, b) => b.heat - a.heat || tie(a, b));
-  }
+  if (key === 'rate') return copy.sort((a, b) => (b.ratePer1k ?? 0) - (a.ratePer1k ?? 0) || a.name.localeCompare(b.name));
+  return copy.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function Chip({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
@@ -75,7 +37,7 @@ function Chip({ label, on, onClick }: { label: string; on: boolean; onClick: () 
 const PAGE = 25;
 
 export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; freshness?: string }) {
-  const [sort, setSort] = useState<SortKey>('picks');
+  const [sort, setSort] = useState<SortKey>('hot');
   const [query, setQuery] = useState('');
   const [niche, setNiche] = useState<string>('');
   const [source, setSource] = useState<string | null>(null);
@@ -108,7 +70,6 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
   const visible = showAll ? rows : rows.slice(0, PAGE);
   const active = TABS.find((t) => t.id === sort) ?? TABS[0];
   const filtersOn = Boolean(query || niche || source);
-  const noPicks = sort === 'picks' && !campaigns.some((c) => c.teamPick);
 
   const selectStyle: React.CSSProperties = {
     padding: '9px 13px', borderRadius: 9, minHeight: 40,
@@ -124,7 +85,7 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
         {freshness && (
           <span className="pill pill-neutral">
             <span className="dot" />
-            Board updated {freshness}
+            Synced with Discord campaigns
           </span>
         )}
       </div>
@@ -220,16 +181,14 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
         <div className="card">
           <p className="empty">
             {campaigns.length === 0
-              ? 'No live campaigns yet. The board fills the first time the ingest job runs — until then this is honestly empty rather than padded with placeholders.'
-              : noPicks
-                ? 'No team picks are set right now. Switch to Hottest or Easiest to get paid to see the full board.'
-                : 'Nothing matches those filters. Clear them and try a wider search.'}
+              ? 'No active campaigns are available right now.'
+              : 'Nothing matches those filters. Clear them and try a wider search.'}
           </p>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(252px, 1fr))', gap: 16 }}>
           {visible.map((c) => (
-            <CampaignCard key={c.id} c={c} pick={sort === 'picks' && c.teamPick} />
+            <CampaignCard key={c.id} c={c} pick={false} />
           ))}
         </div>
       )}
@@ -242,10 +201,8 @@ export function CampaignHub({ campaigns, freshness }: { campaigns: Campaign[]; f
         </div>
       )}
 
-      <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0, maxWidth: '68ch', lineHeight: 1.55 }}>
-        Heat and Effort are our own scores, recomputed every time the board refreshes from each campaign&rsquo;s real
-        stats — rate, view minimum, budget left, payout speed and platforms — and ranked against the rest of the board.
-        They sharpen further as our clippers report what actually got approved and paid.
+      <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0 }}>
+        Campaign names, rates, platforms and availability come from the Clipsy Discord manager.
       </p>
     </div>
   );

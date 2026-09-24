@@ -66,7 +66,14 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
         </div>
       </div>
 
-      {rates.length > 0 && (
+      {c.ratePer1k != null && (
+        <div>
+          <span className="eyebrow" style={{ fontSize: S.eyebrow }}>Rate per 1,000 views</span>
+          <div className="display tabular" style={{ fontSize: S.chipText + 4, fontWeight: 700 }}>{rate(c.ratePer1k)}</div>
+        </div>
+      )}
+
+      {c.ratePer1k == null && rates.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? 6 : 8 }}>
           <span className="eyebrow" style={{ fontSize: S.eyebrow }}>
             {uniform ? 'Rate per 100k · all platforms' : 'Rate per 100k'}

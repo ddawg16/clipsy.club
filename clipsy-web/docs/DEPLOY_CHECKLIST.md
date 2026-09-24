@@ -6,8 +6,8 @@ No production change is authorized by this document. Run it in staging first, th
 
 - [ ] Record the exact website and manager commit SHAs.
 - [ ] Confirm `npm run build` passes in both projects and the manager test suite is green.
-- [ ] Create a manager API key with only the scopes the website actually needs; do not grant `payouts:read` unless required.
-- [ ] Set website secrets: `CLIPSY_API_BASE_URL`, `CLIPSY_API_KEY`, `NEXT_PUBLIC_CLIPSY_DASHBOARD_URL`.
+- [ ] Verify the read-only public campaign feed contains only active campaign name, rate, platforms, and end date. No API key is needed for this feed.
+- [ ] Set `NEXT_PUBLIC_CLIPSY_DASHBOARD_URL`; optionally override `CLIPSY_API_BASE_URL` for a different backend origin.
 - [ ] Set manager values: exact `CLIPSY_WEB_ORIGINS`, `PUBLIC_BASE_URL`, Discord OAuth redirect, and Meta callback credentials if enabled.
 - [ ] Keep all payment execution flags off: `PAYPAL_PAYOUTS_ENABLED=false`, `WISE_PAYOUTS_ENABLED=false`, `CRYPTO_MODE_B_ENABLED=false`, `PAYOUTS_LIVE=false`.
 - [ ] Back up the database and prove restore into a disposable database.

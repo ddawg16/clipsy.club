@@ -6,9 +6,9 @@ import { freshness } from '@/lib/format';
 import { safeExternal } from '@/lib/safe';
 
 export const metadata: Metadata = {
-  title: 'Clipsy — every open clipping campaign, in one place',
+  title: 'Clipsy — active campaigns',
   description:
-    'Every open clipping campaign we can reach, ranked by how hot it runs and how likely you are to actually get paid. We index — we never re-host.',
+    'Active Clipsy campaigns managed through our Discord bot.',
 };
 
 // Always render fresh from the database. This is a live board — a cached
@@ -34,11 +34,11 @@ export default async function BoardPage() {
         <PageHeader
           compact
           eyebrow="The board"
-          title="Every open campaign we can reach."
+          title="Active Clipsy campaigns."
           meta={
             <span className="pill pill-neutral">
               <span className="dot" />
-              {counts.campaigns} live across {counts.sources} networks · updated {freshness(lastRun)}
+              {counts.campaigns} active campaign{counts.campaigns === 1 ? '' : 's'}
             </span>
           }
         />
