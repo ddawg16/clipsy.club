@@ -22,7 +22,7 @@ export function CampaignCard({ c, pick, compact }: { c: Campaign; pick?: boolean
   return (
     <a
       href={`/campaigns/${c.id}`}
-      className="card"
+      className="card campaign-card"
       style={{
         padding: S.pad,
         display: 'flex',

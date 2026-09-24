@@ -32,19 +32,22 @@ export function PageHeader({
   // scroll rather than a full screen before anyone sees a campaign.
   if (compact) {
     return (
-      <div style={{ borderBottom: '1px solid var(--cream-line)', background: 'var(--cream-card)' }}>
+      <div className="board-masthead">
         <div
           className="wrap"
           style={{
-            padding: '14px 32px',
+            padding: '36px 32px 30px',
             display: 'flex',
-            alignItems: 'baseline',
+            alignItems: 'end',
             justifyContent: 'space-between',
             gap: 16,
             flexWrap: 'wrap',
           }}
         >
-          <h1 style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.2 }}>{title}</h1>
+          <div>
+            <span className="eyebrow">{eyebrow}</span>
+            <h1>{title}</h1>
+          </div>
           {meta}
         </div>
       </div>
@@ -590,7 +593,7 @@ export function FinalCta({ discord }: { discord: string }) {
 
 export function Footer({ discord }: { discord: string }) {
   return (
-    <footer style={{ borderTop: '1px solid var(--cream-line)', padding: '56px 0 40px' }}>
+    <footer className="site-footer" style={{ borderTop: '1px solid var(--cream-line)', padding: '56px 0 40px' }}>
       <div className="wrap" style={{ display: 'flex', justifyContent: 'space-between', gap: 40, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 260 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
@@ -633,6 +636,9 @@ export function Footer({ discord }: { discord: string }) {
               Discord
             </a>
             <a href="/dashboard" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>Dashboard</a>
+            <a href="https://apexmedia.space" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: 'var(--ink-soft)' }}>
+              Apex Media ↗
+            </a>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span className="eyebrow" style={{ fontSize: 11.5 }}>
@@ -647,8 +653,7 @@ export function Footer({ discord }: { discord: string }) {
 
       <div className="wrap" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid var(--cream-line)' }}>
         <span style={{ fontSize: 12.5, color: 'var(--ink-faint)' }}>
-          © Clipsy Club. Solely owned and operated by Darsh Shah. Independent — not affiliated with the networks we
-          index. Every campaign links back to its source.
+          © Clipsy Club · An Apex Media company, solely owned and operated by Darsh Shah. Independent of the networks we index. Every campaign links back to its source.
         </span>
       </div>
     </footer>

@@ -49,6 +49,9 @@ export function AppShell({ discord, children }: { discord: string; children: Rea
             Clipsy
           </span>
         </a>
+        <a className="rail-family" href="https://apexmedia.space" target="_blank" rel="noopener noreferrer">
+          An Apex Media company ↗
+        </a>
 
         <nav className="rail-group" style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {LINKS.map((l) => (

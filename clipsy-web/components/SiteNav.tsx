@@ -55,19 +55,16 @@ export function SiteNav({ discord }: { discord: string }) {
   }, [open]);
 
   return (
-    <div
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 40,
-        background: 'rgba(250,241,216,0.92)',
-        backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid var(--cream-line)',
-      }}
-    >
+    <div className="site-nav-shell">
+      <div className="apex-family-bar">
+        <div className="wrap">
+          <span>CLIPSY CLUB <b>×</b> APEX MEDIA</span>
+          <a href="https://apexmedia.space" target="_blank" rel="noopener noreferrer">An Apex Media company ↗</a>
+        </div>
+      </div>
       <div
         className="wrap"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 58, gap: 18, flexWrap: 'wrap' }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 68, gap: 18, flexWrap: 'wrap' }}
       >
         <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           <Logo size={28} />

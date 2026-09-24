@@ -1,13 +1,13 @@
 :root {
-  --cream: #faf1d8;
-  --cream-card: #fffcf2;
-  --cream-line: #e7dbba;
-  --ink: #1e1810;
-  --ink-soft: #5a4f3c;
-  --ink-faint: #8a7d64;
-  --accent: #f0511b;
-  --accent-ink: #2a1204;
-  --green: #4f9a68;
+  --cream: #f3f5f1;
+  --cream-card: #ffffff;
+  --cream-line: #dce3dc;
+  --ink: #101719;
+  --ink-soft: #43534c;
+  --ink-faint: #617168;
+  --accent: #c7f64f;
+  --accent-ink: #101719;
+  --green: #4c9664;
   --green-ink: #0e2a16;
   --amber-bg: rgba(222, 166, 58, 0.26);
   --amber-ink: #4a3506;
@@ -39,7 +39,7 @@ h3,
 .display {
   font-family: var(--font-display), system-ui, sans-serif;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.045em;
   text-wrap: balance;
 }
 
@@ -60,7 +60,7 @@ button:focus-visible {
 }
 
 .wrap {
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 0 32px;
 }
@@ -71,7 +71,7 @@ button:focus-visible {
   justify-content: center;
   gap: 8px;
   padding: 13px 22px;
-  border-radius: 10px;
+  border-radius: 4px;
   font-family: var(--font-display), sans-serif;
   font-weight: 600;
   font-size: 15px;
@@ -85,6 +85,7 @@ button:focus-visible {
   background: var(--accent);
   color: var(--accent-ink);
 }
+.btn-primary:hover { background: #dcff83; color: var(--accent-ink); }
 
 .btn-ghost {
   background: transparent;
@@ -126,14 +127,14 @@ button:focus-visible {
 .card {
   background: var(--cream-card);
   border: 1px solid var(--cream-line);
-  border-radius: 16px;
+  border-radius: 6px;
 }
 
 .eyebrow {
   font-family: var(--font-display), sans-serif;
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -369,4 +370,83 @@ button:focus-visible {
   .guide-quick-path ol { grid-template-columns: 1fr; }
   .guide-quick-path li { flex-direction: row; align-items: center; }
   .guide-step-number { flex: 0 0 30px; }
+}
+
+/* Clipsy and Apex share a family marker; the existing product navigation stays intact. */
+.site-nav-shell {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  color: #f3f5f1;
+  background: rgba(16, 23, 25, 0.97);
+  border-bottom: 1px solid #34413c;
+  backdrop-filter: blur(12px);
+}
+.site-nav-shell > .wrap { padding-top: 8px; padding-bottom: 8px; }
+.site-nav-shell .site-nav > a { color: #c9d7ce; }
+.site-nav-shell .site-nav > a:hover { color: var(--accent); }
+.site-nav-shell .site-nav button:hover { color: var(--accent) !important; }
+.site-nav-shell .site-nav .card { color: var(--ink); box-shadow: 0 18px 40px rgba(8, 20, 13, .17) !important; }
+.site-nav-shell .site-nav .card a:hover { color: var(--ink); background: var(--cream); }
+.site-nav-shell .btn-ghost { color: #f3f5f1; border-color: #6e8074; }
+.site-nav-shell .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.apex-family-bar { background: #090e0f; border-bottom: 1px solid #26332b; }
+.apex-family-bar .wrap {
+  min-height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: #bbc9be;
+  font: 700 11px var(--font-display), sans-serif;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.apex-family-bar b, .apex-family-bar a { color: var(--accent); }
+.apex-family-bar a:hover { text-decoration: underline; }
+
+.board-masthead {
+  background: var(--cream);
+  border-bottom: 1px solid var(--cream-line);
+}
+.board-masthead .eyebrow { color: #627a21; }
+.board-masthead h1 {
+  margin-top: 9px;
+  max-width: 750px;
+  font-size: clamp(32px, 4.2vw, 58px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -.07em;
+}
+.board-masthead .pill { flex-shrink: 0; }
+#hub { gap: 16px !important; }
+#hub h2 { font-size: 24px !important; letter-spacing: -.05em; }
+#hub input[type='search'], #hub select { border-radius: 4px !important; }
+#hub [role='tab'], #hub button[aria-pressed], #hub .pill { border-radius: 4px !important; }
+.campaign-card {
+  border-radius: 4px;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.campaign-card:hover {
+  border-color: #91b34b !important;
+  box-shadow: 0 12px 28px rgba(16, 40, 19, .09);
+  transform: translateY(-2px);
+}
+.campaign-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.rail-family {
+  color: #617a22;
+  font: 700 10px var(--font-display), sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin: -14px 4px 2px;
+}
+.rail-family:hover { color: #435e05; }
+.site-footer { background: #eef2eb; }
+.site-footer .eyebrow { color: #617a22; }
+
+@media (max-width: 760px) {
+  .apex-family-bar .wrap { font-size: 9px; }
+  .board-masthead .wrap { padding-top: 28px !important; padding-bottom: 26px !important; }
+  .board-masthead h1 { font-size: clamp(30px, 8vw, 45px); }
+  .rail-family { display: none; }
 }
