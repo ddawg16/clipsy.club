@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Footer, Nav } from '@/components/Sections';
 import { getCampaign, getRelated } from '@/lib/data';
-import { payout, rate, timeLeft, views, dollars } from '@/lib/format';
+import { rate, timeLeft, views, dollars } from '@/lib/format';
 import { safeExternal, safeHref } from '@/lib/safe';
 import { PlatformIcon } from '@/components/Logo';
 
@@ -37,11 +37,9 @@ export default async function CampaignPage({ params }: Props) {
 
   const facts: Array<[string, string]> = [
     [`Bounty rate per ${c.ratePer1k != null ? '1,000' : '100,000'} views`, rate(c.ratePer1k ?? c.rateCpm)],
-    ['Qualifier', c.source === 'Clipsy Direct' ? 'See campaign requirements in the dashboard' : views(c.minViews)],
-    ['Payout', payout(c.payoutDays)],
+    ['Platforms', c.platforms.length ? c.platforms.map((platform) => platform === 'x' ? 'X' : platform.charAt(0).toUpperCase() + platform.slice(1)).join(', ') : 'See dashboard'],
+    ['Requirements', c.source === 'Clipsy Direct' ? 'See campaign requirements in the dashboard' : views(c.minViews)],
     ['Closes', timeLeft(c.endsAt)],
-    ['Network', c.source],
-    ['Category', c.category ? c.category.replace(/_/g, ' ') : 'Not stated'],
   ];
   const rates = c.ratePer1k != null ? [] : c.platformRates.filter((r) => r.rate !== null);
   const brief = safeHref(c.briefUrl);
